@@ -2,717 +2,984 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TutorFlow - 과외 관리 시스템</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TutorFlow</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 <style>
-:root{--primary:#4F46E5;--primary-light:#818CF8;--primary-bg:#EEF2FF;--success:#10B981;--success-bg:#D1FAE5;--warning:#F59E0B;--warning-bg:#FEF3C7;--danger:#EF4444;--danger-bg:#FEE2E2;--g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g300:#D1D5DB;--g400:#9CA3AF;--g500:#6B7280;--g600:#4B5563;--g700:#374151;--g800:#1F2937;--g900:#111827;--r:12px;--sh:0 1px 3px rgba(0,0,0,.1)}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--g50);color:var(--g800);display:flex;min-height:100vh}
-
-/* Mockup Banner */
-.mockup-banner{position:fixed;top:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff;text-align:center;padding:10px;font-size:14px;font-weight:600;letter-spacing:.5px}
-.mockup-banner span{background:rgba(0,0,0,.2);padding:2px 10px;border-radius:12px;font-size:12px;margin-left:8px}
-
-/* Sidebar */
-.sidebar{width:250px;background:var(--g900);color:#fff;padding:60px 14px 20px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
-.logo{font-size:20px;font-weight:700;padding:0 10px 20px;border-bottom:1px solid var(--g700);margin-bottom:20px;display:flex;align-items:center;gap:8px}
-.logo span{color:var(--primary-light)}
-nav{flex:1}
-nav a{display:flex;align-items:center;gap:10px;padding:11px 12px;color:var(--g400);text-decoration:none;border-radius:8px;margin-bottom:3px;font-size:14px;transition:.15s}
-nav a:hover{background:var(--g700);color:#fff}
-nav a.active{background:var(--primary);color:#fff}
-nav a svg{width:18px;height:18px;flex-shrink:0}
-.user-info{border-top:1px solid var(--g700);padding-top:14px;display:flex;align-items:center;gap:10px}
-.user-avatar{width:34px;height:34px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
-.user-name{font-size:13px;font-weight:500}
-.user-role{font-size:11px;color:var(--g400)}
-
-/* Main */
-.main{margin-left:250px;flex:1;padding:70px 28px 28px}
-.page{display:none}.page.active{display:block}
-.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-.page-header h1{font-size:24px;font-weight:700}
-.subtitle{color:var(--g500);font-size:13px;margin-top:3px}
-
-/* Cards */
-.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:20px;margin-bottom:16px}
-.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.card-header h3{font-size:15px;font-weight:600}
-
-/* Stats */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
-.stat-card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:18px}
-.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:20px}
-.stat-value{font-size:26px;font-weight:700}
-.stat-label{font-size:12px;color:var(--g500);margin-top:3px}
-
-/* Buttons */
-.btn{padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:.15s}
-.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#4338CA}
-.btn-secondary{background:var(--g100);color:var(--g700)}.btn-secondary:hover{background:var(--g200)}
-.btn-success{background:var(--success);color:#fff}
-.btn-danger{background:var(--danger);color:#fff}
-.btn-sm{padding:5px 12px;font-size:12px}
-
-/* Tables */
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--g500);padding:10px 14px;border-bottom:1px solid var(--g200)}
-td{padding:12px 14px;border-bottom:1px solid var(--g100);font-size:13px}
-tr:hover td{background:var(--g50)}
-
-/* Badges */
-.badge{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500}
-.badge-success{background:var(--success-bg);color:#065F46}
-.badge-warning{background:var(--warning-bg);color:#92400E}
-.badge-danger{background:var(--danger-bg);color:#991B1B}
-.badge-info{background:var(--primary-bg);color:#3730A3}
-
-/* Avatar */
-.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#fff;flex-shrink:0}
-.avatar-row{display:flex;align-items:center;gap:10px}
-
-/* Upload */
-.upload-area{border:2px dashed var(--g300);border-radius:var(--r);padding:40px;text-align:center;cursor:pointer;transition:.2s;background:var(--g50)}
-.upload-area:hover{border-color:var(--primary);background:var(--primary-bg)}
-.upload-area .icon{font-size:40px;margin-bottom:8px}
-.upload-main{font-size:15px;font-weight:500;color:var(--g700);margin-bottom:4px}
-.upload-sub{color:var(--g500);font-size:13px}
-
-/* Progress */
-.progress-bar{background:var(--g200);border-radius:8px;height:8px;overflow:hidden}
-.progress-fill{height:100%;border-radius:8px;transition:width .6s}
-
-/* Forms */
-.form-group{margin-bottom:16px}
-.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:5px;color:var(--g700)}
-.form-input{width:100%;padding:9px 12px;border:1px solid var(--g300);border-radius:8px;font-size:13px}
-.form-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
-textarea.form-input{resize:vertical;min-height:100px}
-select.form-input{appearance:auto}
-
-/* Grid */
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-
-/* Tabs */
-.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--g200)}
-.tab{padding:9px 18px;font-size:13px;font-weight:500;color:var(--g500);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
-.tab:hover{color:var(--g700)}.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
-
-/* Modal */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
-.modal-overlay.active{display:flex}
-.modal{background:#fff;border-radius:16px;padding:28px;width:520px;max-height:80vh;overflow-y:auto;box-shadow:var(--sh)}
-.modal h2{font-size:18px;margin-bottom:20px}
-.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
-
-/* Report preview */
-.report-preview{background:var(--g50);border:1px solid var(--g200);border-radius:var(--r);padding:20px;font-size:13px;line-height:1.8;white-space:pre-wrap}
-
-/* Process steps */
-.process-steps{display:flex;flex-direction:column;gap:12px;margin:20px 0}
-.process-step{display:flex;align-items:center;gap:12px;padding:14px;background:var(--g50);border-radius:10px}
-.process-step.active{background:var(--primary-bg)}
-.process-step.done{background:var(--success-bg)}
-.step-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--g200);font-size:13px;font-weight:600}
-.process-step.active .step-icon{background:var(--primary);color:#fff}
-.process-step.done .step-icon{background:var(--success);color:#fff}
-.step-text{font-size:13px;font-weight:500}
-.step-sub{font-size:11px;color:var(--g500)}
-
-/* Schedule grid */
-.sched-grid{display:grid;grid-template-columns:70px repeat(7,1fr);gap:1px;background:var(--g200);border-radius:8px;overflow:hidden}
-.sched-head{background:var(--g50);padding:10px;font-size:12px;font-weight:600;text-align:center}
-.sched-cell{background:#fff;padding:6px;min-height:60px}
-.sched-time{background:#fff;padding:10px;font-size:12px;color:var(--g500);text-align:center;display:flex;align-items:center;justify-content:center}
-.sched-block{padding:6px 8px;border-radius:4px;font-size:11px;border-left:3px solid}
-
-/* Drive items */
-.drive-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--g50);border-radius:8px;margin-bottom:6px}
-.drive-item:hover{background:var(--g100)}
-
-/* Homework */
-.hw-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--g100)}
-.hw-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary)}
-
-/* Schedule item */
-.sched-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--g100)}
-.sched-item:last-child{border-bottom:none}
-
-/* Spinner */
-@keyframes spin{to{transform:rotate(360deg)}}
-.spinner{width:18px;height:18px;border:2px solid var(--g200);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
-
-/* Toast */
-.toast{position:fixed;bottom:30px;right:30px;background:var(--g900);color:#fff;padding:14px 24px;border-radius:10px;font-size:14px;z-index:300;transform:translateY(100px);opacity:0;transition:.3s}
-.toast.show{transform:translateY(0);opacity:1}
-
-@media(max-width:768px){
-  .sidebar{width:60px;padding:60px 8px 12px}
-  .logo span,.sidebar nav a span,.user-info div:last-child{display:none}
-  .main{margin-left:60px;padding:60px 16px 16px}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .grid-2{grid-template-columns:1fr}
-  .sched-grid{font-size:10px}
+/* ===== DESIGN TOKENS ===== */
+:root {
+  --font: 'Pretendard Variable', 'Pretendard', -apple-system, sans-serif;
+  /* Warm palette — cream base, terracotta accent */
+  --bg: #FAF8F5;
+  --bg-elevated: #FFFFFF;
+  --bg-recessed: #F3F0EB;
+  --bg-hover: #EEEAE4;
+  --text-primary: #2C2520;
+  --text-secondary: #7A7067;
+  --text-tertiary: #A8A099;
+  --border: #E8E3DC;
+  --border-light: #F0ECE6;
+  --accent: #C05D3B;
+  --accent-soft: #F4E8E2;
+  --accent-hover: #A84E30;
+  --green: #4A8B5C;
+  --green-soft: #E3F0E7;
+  --amber: #B8862B;
+  --amber-soft: #F5EDD8;
+  --red: #C0463B;
+  --red-soft: #F4E2E0;
+  --blue: #4A6FA5;
+  --blue-soft: #E2EAF4;
+  /* Spacing — 4pt base */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px;
+  --s6: 24px; --s7: 32px; --s8: 48px; --s9: 64px;
+  /* Motion */
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --dur-fast: 120ms;
+  --dur-med: 250ms;
+  --dur-slow: 400ms;
+  /* Radius */
+  --r-sm: 6px; --r-md: 10px; --r-lg: 16px;
+  /* Safe areas */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
 }
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.55;
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+
+/* ===== MOCKUP BANNER ===== */
+.mockup-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  background: var(--accent);
+  color: #fff;
+  text-align: center;
+  padding: var(--s1) var(--s4);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  height: 28px;
+  display: flex; align-items: center; justify-content: center; gap: var(--s2);
+}
+.mockup-bar::before { content: ''; width: 6px; height: 6px; background: #fff; border-radius: 50%; opacity: .6; }
+
+/* ===== LAYOUT: DESKTOP ===== */
+.shell { display: flex; min-height: 100dvh; padding-top: 28px; }
+.sidebar {
+  width: 220px;
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  position: fixed; top: 28px; bottom: 0; left: 0;
+  z-index: 100;
+}
+.sidebar-brand {
+  padding: var(--s6) var(--s5);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+.sidebar-nav { flex: 1; padding: var(--s2) var(--s3); }
+.sidebar-nav a {
+  display: flex; align-items: center; gap: var(--s3);
+  padding: var(--s3) var(--s3);
+  border-radius: var(--r-sm);
+  font-size: 0.875rem;
+  font-weight: 450;
+  color: var(--text-secondary);
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  margin-bottom: 2px;
+  cursor: pointer;
+}
+.sidebar-nav a:hover { background: var(--bg-recessed); color: var(--text-primary); }
+.sidebar-nav a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.sidebar-nav a .nav-icon { width: 20px; text-align: center; font-size: 1rem; flex-shrink: 0; }
+.sidebar-user {
+  padding: var(--s4) var(--s5);
+  border-top: 1px solid var(--border-light);
+  display: flex; align-items: center; gap: var(--s3);
+}
+.sidebar-user-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 600;
+}
+.sidebar-user-info { font-size: 0.8125rem; }
+.sidebar-user-sub { font-size: 0.6875rem; color: var(--text-tertiary); }
+
+.content { margin-left: 220px; flex: 1; padding: clamp(20px, 3vw, 40px); max-width: 1100px; }
+
+/* ===== MOBILE LAYOUT ===== */
+.mobile-header {
+  display: none;
+  position: fixed; top: 28px; left: 0; right: 0;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  padding: var(--s3) var(--s4);
+  z-index: 100;
+  height: 52px;
+  align-items: center;
+  justify-content: space-between;
+}
+.mobile-header-title { font-size: 1rem; font-weight: 700; color: var(--accent); }
+.mobile-header-user {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 600;
+}
+
+.bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+  padding: var(--s2) 0 calc(var(--s2) + var(--sab));
+}
+.bottom-nav-inner {
+  display: flex; justify-content: space-around;
+  max-width: 500px; margin: 0 auto;
+}
+.bottom-nav a {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: var(--s1) var(--s2);
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--dur-fast) var(--ease-out);
+  min-width: 56px;
+}
+.bottom-nav a .bnav-icon { font-size: 1.25rem; height: 24px; display: flex; align-items: center; justify-content: center; }
+.bottom-nav a.active { color: var(--accent); font-weight: 600; }
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .mobile-header { display: flex; }
+  .bottom-nav { display: block; }
+  .content { margin-left: 0; padding: calc(52px + 28px + var(--s4)) var(--s4) calc(60px + var(--sab) + var(--s4)); max-width: 100%; }
+}
+
+/* ===== PAGE TRANSITIONS ===== */
+.page { display: none; }
+.page.active { display: block; animation: pageIn var(--dur-med) var(--ease-out); }
+@keyframes pageIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ===== TYPOGRAPHY ===== */
+.heading-lg { font-size: clamp(1.25rem, 2vw, 1.5rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; }
+.heading-md { font-size: 1.0625rem; font-weight: 650; letter-spacing: -0.01em; line-height: 1.35; }
+.heading-sm { font-size: 0.875rem; font-weight: 600; letter-spacing: -0.005em; }
+.text-sm { font-size: 0.8125rem; }
+.text-xs { font-size: 0.75rem; }
+.text-muted { color: var(--text-secondary); }
+.text-faint { color: var(--text-tertiary); }
+
+/* ===== PAGE HEADER ===== */
+.page-top { margin-bottom: var(--s7); }
+.page-top-row { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s4); flex-wrap: wrap; }
+.page-top-sub { color: var(--text-tertiary); font-size: 0.8125rem; margin-top: var(--s1); }
+
+/* ===== SECTION ===== */
+.section { margin-bottom: var(--s7); }
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  margin-bottom: var(--s3);
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--s2);
+  padding: var(--s2) var(--s4);
+  border-radius: var(--r-sm);
+  border: none; cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 550;
+  transition: all var(--dur-fast) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.btn-accent { background: var(--accent); color: #fff; }
+.btn-accent:hover { background: var(--accent-hover); }
+.btn-accent:active { transform: scale(0.97); }
+.btn-soft { background: var(--bg-recessed); color: var(--text-secondary); }
+.btn-soft:hover { background: var(--bg-hover); color: var(--text-primary); }
+.btn-ghost { background: none; color: var(--text-secondary); padding: var(--s2) var(--s3); }
+.btn-ghost:hover { color: var(--text-primary); background: var(--bg-recessed); }
+.btn-sm { padding: var(--s1) var(--s3); font-size: 0.75rem; }
+@media (pointer: coarse) { .btn { padding: var(--s3) var(--s5); min-height: 44px; } .btn-sm { padding: var(--s2) var(--s4); min-height: 40px; } }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ===== BADGE ===== */
+.tag {
+  display: inline-flex; align-items: center;
+  padding: 2px var(--s2);
+  border-radius: 4px;
+  font-size: 0.6875rem;
+  font-weight: 550;
+}
+.tag-green { background: var(--green-soft); color: var(--green); }
+.tag-amber { background: var(--amber-soft); color: var(--amber); }
+.tag-red { background: var(--red-soft); color: var(--red); }
+.tag-blue { background: var(--blue-soft); color: var(--blue); }
+
+/* ===== STAT ROW ===== */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--s3);
+  margin-bottom: var(--s7);
+}
+.stat-item {
+  padding: var(--s4) var(--s5);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-md);
+}
+.stat-num { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; }
+.stat-label { font-size: 0.75rem; color: var(--text-tertiary); margin-top: 2px; }
+
+/* ===== LIST ===== */
+.list { background: var(--bg-elevated); border: 1px solid var(--border-light); border-radius: var(--r-md); overflow: hidden; }
+.list-item {
+  display: flex; align-items: center; gap: var(--s3);
+  padding: var(--s4) var(--s5);
+  border-bottom: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.list-item:last-child { border-bottom: none; }
+.list-item:hover { background: var(--bg-recessed); }
+.list-item:active { background: var(--bg-hover); }
+.list-body { flex: 1; min-width: 0; }
+.list-title { font-size: 0.875rem; font-weight: 550; }
+.list-sub { font-size: 0.75rem; color: var(--text-tertiary); margin-top: 1px; }
+.list-right { display: flex; align-items: center; gap: var(--s2); flex-shrink: 0; }
+
+/* ===== AVATAR ===== */
+.av {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8rem; font-weight: 600; color: #fff; flex-shrink: 0;
+}
+.av-sm { width: 28px; height: 28px; font-size: 0.7rem; }
+
+/* ===== PROGRESS ===== */
+.prog { height: 4px; background: var(--bg-recessed); border-radius: 2px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 2px; transition: width var(--dur-slow) var(--ease-out); }
+
+/* ===== FORM ===== */
+.field { margin-bottom: var(--s4); }
+.field-label { display: block; font-size: 0.75rem; font-weight: 550; color: var(--text-secondary); margin-bottom: var(--s1); }
+.field-input {
+  width: 100%; padding: var(--s3) var(--s3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  font-size: 0.875rem;
+  background: var(--bg-elevated);
+  transition: border var(--dur-fast) var(--ease-out);
+}
+.field-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+select.field-input { appearance: auto; }
+textarea.field-input { resize: vertical; min-height: 80px; }
+@media (pointer: coarse) { .field-input { padding: var(--s3) var(--s4); font-size: 1rem; min-height: 48px; } }
+
+/* ===== UPLOAD ZONE ===== */
+.upload-zone {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--r-md);
+  padding: var(--s8) var(--s6);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  background: var(--bg-elevated);
+}
+.upload-zone:hover { border-color: var(--accent); background: var(--accent-soft); }
+.upload-zone:active { transform: scale(0.995); }
+.upload-icon { font-size: 2rem; margin-bottom: var(--s3); opacity: .5; }
+
+/* ===== INLINE PANEL (replaces modals) ===== */
+.panel {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.panel-header {
+  padding: var(--s4) var(--s5);
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border-light);
+}
+.panel-body { padding: var(--s5); }
+
+/* ===== REPORT BLOCK ===== */
+.report-text {
+  background: var(--bg-recessed);
+  border-radius: var(--r-sm);
+  padding: var(--s5);
+  font-size: 0.8125rem;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+}
+
+/* ===== PROCESS STEPS ===== */
+.steps { display: flex; flex-direction: column; gap: var(--s3); }
+.step {
+  display: flex; align-items: center; gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  border-radius: var(--r-sm);
+  background: var(--bg-recessed);
+  font-size: 0.8125rem;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.step.is-active { background: var(--accent-soft); }
+.step.is-done { background: var(--green-soft); }
+.step-dot {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 600;
+  background: var(--bg-hover); color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+.step.is-active .step-dot { background: var(--accent); color: #fff; }
+.step.is-done .step-dot { background: var(--green); color: #fff; }
+
+/* ===== SCHEDULE GRID ===== */
+.sched { display: grid; grid-template-columns: 56px repeat(7, 1fr); border: 1px solid var(--border-light); border-radius: var(--r-md); overflow: hidden; background: var(--bg-elevated); }
+.sched-h { padding: var(--s2) var(--s1); font-size: 0.6875rem; font-weight: 600; text-align: center; background: var(--bg-recessed); color: var(--text-secondary); border-bottom: 1px solid var(--border-light); }
+.sched-t { padding: var(--s3) var(--s1); font-size: 0.6875rem; text-align: center; color: var(--text-tertiary); border-right: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; }
+.sched-c { border-right: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); padding: 3px; min-height: 52px; }
+.sched-c:nth-child(8n) { border-right: none; }
+.sched-block {
+  padding: 4px 6px; border-radius: 4px; font-size: 0.625rem; font-weight: 550;
+  line-height: 1.3; cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.sched-block:active { transform: scale(0.95); }
+
+/* ===== CHECKBOX ===== */
+.check-row {
+  display: flex; align-items: center; gap: var(--s3);
+  padding: var(--s3) 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.check-row:last-child { border-bottom: none; }
+.check-row input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--accent); flex-shrink: 0; }
+.check-row.is-done label { text-decoration: line-through; color: var(--text-tertiary); }
+
+/* ===== INLINE EXPAND (no modals) ===== */
+.expand-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-med) var(--ease-out);
+}
+.expand-content.open { grid-template-rows: 1fr; }
+.expand-inner { overflow: hidden; }
+
+/* ===== DRIVE LINK ===== */
+.drive-row {
+  display: flex; align-items: center; gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  background: var(--bg-recessed);
+  border-radius: var(--r-sm);
+  margin-bottom: var(--s2);
+  font-size: 0.8125rem;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.drive-row:hover { background: var(--bg-hover); }
+
+/* ===== DETAIL TABS ===== */
+.dtabs {
+  display: flex; gap: var(--s1); border-bottom: 1.5px solid var(--border);
+  margin-bottom: var(--s6);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.dtab {
+  padding: var(--s3) var(--s4);
+  font-size: 0.8125rem; font-weight: 500;
+  color: var(--text-tertiary);
+  border: none; background: none; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1.5px;
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.dtab:hover { color: var(--text-secondary); }
+.dtab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+
+/* ===== 2-COL ===== */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); }
+@media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed; bottom: calc(70px + var(--sab)); left: 50%; z-index: 400;
+  background: var(--text-primary); color: var(--bg);
+  padding: var(--s3) var(--s5);
+  border-radius: var(--r-md);
+  font-size: 0.8125rem; font-weight: 500;
+  transform: translate(-50%, 20px); opacity: 0;
+  transition: all var(--dur-med) var(--ease-out);
+  pointer-events: none;
+  max-width: calc(100vw - 32px);
+  text-align: center;
+}
+.toast.show { transform: translate(-50%, 0); opacity: 1; }
+@media (min-width: 769px) { .toast { bottom: 32px; } }
+
+/* ===== SPINNER ===== */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
+
+/* ===== BACK BTN ===== */
+.back-link {
+  display: inline-flex; align-items: center; gap: var(--s2);
+  font-size: 0.8125rem; color: var(--text-tertiary);
+  margin-bottom: var(--s4); cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.back-link:hover { color: var(--text-primary); }
 </style>
 </head>
 <body>
 
-<!-- Mockup Banner -->
-<div class="mockup-banner">
-  This is a MOCKUP prototype — 실제 데이터가 아닌 목업 데이터로 동작합니다
-  <span>v0.1 Preview</span>
+<div class="mockup-bar">MOCKUP 프로토타입 — 실제 데이터가 아닌 목업입니다</div>
+
+<!-- Mobile Header -->
+<div class="mobile-header" id="mobileHeader">
+  <span class="mobile-header-title">TutorFlow</span>
+  <div class="mobile-header-user">김</div>
 </div>
 
-<!-- Sidebar -->
-<div class="sidebar">
-  <div class="logo">📖 <span>TutorFlow</span></div>
-  <nav id="nav"></nav>
-  <div class="user-info">
-    <div class="user-avatar">김</div>
-    <div><div class="user-name">김선생</div><div class="user-role">수학 / 과학</div></div>
-  </div>
+<div class="shell">
+  <!-- Desktop Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">TutorFlow</div>
+    <nav class="sidebar-nav" id="sideNav"></nav>
+    <div class="sidebar-user">
+      <div class="sidebar-user-dot">김</div>
+      <div class="sidebar-user-info">
+        <div style="font-weight:550">김선생</div>
+        <div class="sidebar-user-sub">수학 · 과학</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main class="content" id="app"></main>
 </div>
 
-<div class="main" id="app"></div>
+<!-- Mobile Bottom Nav -->
+<div class="bottom-nav"><div class="bottom-nav-inner" id="bottomNav"></div></div>
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- Modal Container -->
-<div id="modals"></div>
-
 <script>
-// ============ DATA ============
-const STUDENTS = [
-  {id:1,name:'박지현',initial:'박',color:'#6366F1',grade:'중3',subject:'수학',parent:'박영수',textbook:'개념원리 중3-2',currentPage:48,totalPages:120,chapter:'Ch.3 이차방정식',schedule:'월/수/금 14:00',memo:'근의 공식 대입 정확, 판별식 부호 실수 잦음'},
-  {id:2,name:'이준호',initial:'이',color:'#EC4899',grade:'고1',subject:'과학',parent:'이미경',textbook:'물리학I',currentPage:35,totalPages:90,chapter:'Ch.2 뉴턴의 운동법칙',schedule:'월/수 16:00',memo:'실험 보고서 잘 쓰는 편, 수식 전개 약간 약함'},
-  {id:3,name:'김민서',initial:'김',color:'#10B981',grade:'중2',subject:'수학',parent:'김정호',textbook:'쎈 중2-1',currentPage:82,totalPages:150,chapter:'Ch.5 일차함수',schedule:'화/목 17:00',memo:'계산 속도 빠름, 서술형 문제 약함'},
-  {id:4,name:'최서연',initial:'최',color:'#F59E0B',grade:'고2',subject:'수학',parent:'최은영',textbook:'수학의 정석 확통',currentPage:22,totalPages:80,chapter:'Ch.1 경우의 수',schedule:'월/목/토 19:00',memo:'개념 이해 빠르나 응용 문제에서 막힘'}
+/* ============================
+   DATA
+   ============================ */
+const S = [
+  {id:1,nm:'박지현',ini:'지현',c:'#6366F1',gr:'중3',sub:'수학',par:'박영수',book:'개념원리 중3-2',cp:48,tp:120,ch:'Ch.3 이차방정식',sched:'월/수/금 14:00',memo:'근의 공식 정확, 판별식 부호 실수 잦음'},
+  {id:2,nm:'이준호',ini:'준호',c:'#D4577A',gr:'고1',sub:'과학',par:'이미경',book:'물리학I',cp:35,tp:90,ch:'Ch.2 뉴턴의 운동법칙',sched:'월/수 16:00',memo:'실험 보고서 잘 씀, 수식 전개 약간 약함'},
+  {id:3,nm:'김민서',ini:'민서',c:'#4A8B5C',gr:'중2',sub:'수학',par:'김정호',book:'쎈 중2-1',cp:82,tp:150,ch:'Ch.5 일차함수',sched:'화/목 17:00',memo:'계산 속도 빠름, 서술형 약함'},
+  {id:4,nm:'최서연',ini:'서연',c:'#B8862B',gr:'고2',sub:'수학',par:'최은영',book:'수학의 정석 확통',cp:22,tp:80,ch:'Ch.1 경우의 수',sched:'월/목/토 19:00',memo:'개념 이해 빠름, 응용 약함'}
 ];
 
-const HOMEWORK = [
-  {id:1,studentId:1,content:'교재 p.52~55 풀이',status:'진행중',progress:75,items:[{t:'p.52 예제 1~5',done:true},{t:'p.53 연습 1~8',done:true},{t:'p.54 심화 1~5',done:false},{t:'유인물 #6 오답노트',done:false}]},
-  {id:2,studentId:2,content:'실험 보고서 작성',status:'완료',progress:100,items:[{t:'실험 보고서 작성',done:true},{t:'교재 p.36 문제풀이',done:true}]},
-  {id:3,studentId:3,content:'유인물 #7 문제풀이',status:'미시작',progress:0,items:[{t:'유인물 #7 전체',done:false},{t:'교재 p.83~85',done:false}]},
-  {id:4,studentId:4,content:'경우의 수 연습문제',status:'완료',progress:100,items:[{t:'교재 p.23~25',done:true},{t:'유인물 #3',done:true}]}
+const HW = [
+  {id:1,sid:1,content:'교재 p.52~55 풀이',status:'진행중',items:[{t:'p.52 예제 1~5',d:true},{t:'p.53 연습 1~8',d:true},{t:'p.54 심화 1~5',d:false},{t:'유인물 #6 오답노트',d:false}]},
+  {id:2,sid:2,content:'실험 보고서 작성',status:'완료',items:[{t:'실험 보고서',d:true},{t:'교재 p.36 풀이',d:true}]},
+  {id:3,sid:3,content:'유인물 #7 문제풀이',status:'미시작',items:[{t:'유인물 #7',d:false},{t:'교재 p.83~85',d:false}]},
+  {id:4,sid:4,content:'경우의 수 연습',status:'완료',items:[{t:'교재 p.23~25',d:true},{t:'유인물 #3',d:true}]}
 ];
 
-const REPORTS = [
-  {id:1,studentId:1,date:'4/13',topic:'이차방정식의 활용',status:'검토중',text:`[수업 리포트] 박지현 · 4월 13일\n\n■ 오늘 수업 내용\n- 이차방정식의 활용 (교재 p.52~55)\n- 실생활 문제를 이차방정식으로 세우는 연습\n- 넓이, 연속하는 수, 시간/거리 문제 유형 학습\n\n■ 학습 태도 및 이해도\n- 방정식 세우기까지는 잘 하지만, 문제에서 조건을 놓치는 경우가 있음\n- 특히 "양수 조건" 확인을 빠뜨리는 실수 반복\n- 풀이 속도는 빨라지고 있으며, 근의 공식 적용은 안정적\n\n■ 숙제\n- 교재 p.56~58 연습문제 (1~12번)\n- 유인물 #7 (이차방정식 활용 심화)\n\n■ 다음 수업 예고\n- 이차함수 y=ax² 그래프 도입\n\n■ 선생님 코멘트\n지현이가 문장제 문제 해석력이 많이 좋아졌습니다.\n다만 답을 구한 후 문제 조건에 맞는지 검증하는 습관을 들이면 더 좋겠습니다.`},
-  {id:2,studentId:2,date:'4/11',topic:'뉴턴의 제2법칙, F=ma',status:'미발송',text:`[수업 리포트] 이준호 · 4월 11일\n\n■ 오늘 수업 내용\n- 뉴턴의 제2법칙 F=ma 공식 유도\n- 힘, 질량, 가속도의 관계 실험 분석\n\n■ 학습 태도 및 이해도\n- 개념 이해는 빠르나 단위 환산에서 실수\n- 자유 물체도 그리기 연습 필요\n\n■ 숙제\n- 교재 p.36~38 문제풀이\n\n■ 다음 수업 예고\n- 뉴턴의 제3법칙 (작용-반작용)\n\n■ 선생님 코멘트\n준호가 물리에 흥미를 보이고 있어 좋습니다.`},
-  {id:3,studentId:3,date:'4/10',topic:'일차함수 그래프',status:'미발송',text:`[수업 리포트] 김민서 · 4월 10일\n\n■ 오늘 수업 내용\n- 일차함수 y=ax+b 그래프 그리기\n- 기울기와 y절편의 의미\n\n■ 학습 태도 및 이해도\n- 그래프 그리기는 정확하나 기울기 부호 판별 연습 필요\n\n■ 숙제\n- 교재 p.83~85\n- 유인물 #7\n\n■ 선생님 코멘트\n민서가 꾸준히 성장하고 있습니다.`},
-  {id:4,studentId:1,date:'4/11',topic:'이차방정식 - 근의 공식',status:'발송완료',text:'[수업 리포트] 박지현 · 4월 11일\n\n■ 근의 공식 학습 완료...'},
-  {id:5,studentId:4,date:'4/10',topic:'경우의 수 - 순열',status:'발송완료',text:'[수업 리포트] 최서연 · 4월 10일\n\n■ 순열 개념 학습 완료...'}
+const REP = [
+  {id:1,sid:1,dt:'4/13',topic:'이차방정식의 활용',st:'검토중',txt:`[수업 리포트] 박지현 · 4월 13일\n\n■ 오늘 수업 내용\n- 이차방정식의 활용 (교재 p.52~55)\n- 실생활 문제를 이차방정식으로 세우는 연습\n- 넓이, 연속하는 수, 시간/거리 유형\n\n■ 학습 태도 및 이해도\n- 방정식 세우기까지는 잘 함\n- "양수 조건" 확인을 빠뜨리는 실수 반복\n- 근의 공식 적용은 안정적\n\n■ 숙제\n- 교재 p.56~58 연습문제 1~12번\n- 유인물 #7\n\n■ 다음 수업\n- 이차함수 y=ax² 그래프\n\n■ 코멘트\n지현이 문장제 해석력이 좋아졌습니다.\n답 검증 습관만 들이면 더 좋겠습니다.`},
+  {id:2,sid:2,dt:'4/11',topic:'뉴턴의 제2법칙',st:'미발송',txt:`[수업 리포트] 이준호 · 4월 11일\n\n■ 수업 내용\n- F=ma 공식 유도 및 적용\n- 자유 물체도 그리기\n\n■ 이해도\n- 개념 이해 빠름, 단위 환산 실수\n\n■ 숙제\n- 교재 p.36~38\n\n■ 다음 수업\n- 작용-반작용 법칙\n\n■ 코멘트\n물리에 흥미를 보여 좋습니다.`},
+  {id:3,sid:3,dt:'4/10',topic:'일차함수 그래프',st:'미발송',txt:`[수업 리포트] 김민서 · 4월 10일\n\n■ 수업 내용\n- y=ax+b 그래프 그리기\n- 기울기, y절편\n\n■ 이해도\n- 그래프 정확, 기울기 부호 판별 연습 필요\n\n■ 숙제\n- 교재 p.83~85, 유인물 #7\n\n■ 코멘트\n꾸준히 성장 중입니다.`},
+  {id:4,sid:1,dt:'4/11',topic:'근의 공식, 판별식',st:'발송완료',txt:'[수업 리포트] 박지현 · 4월 11일\n\n■ 근의 공식 학습 완료\n■ 판별식 D=b²-4ac 연습'},
+  {id:5,sid:4,dt:'4/10',topic:'경우의 수 - 순열',st:'발송완료',txt:'[수업 리포트] 최서연 · 4월 10일\n\n■ 순열 개념 완료'}
 ];
 
-const MATERIALS = [
-  {id:1,studentId:1,name:'유인물 #7 - 이차방정식 활용',type:'유인물',date:'4/13',link:'#'},
-  {id:2,studentId:1,name:'유인물 #6 - 이차방정식 연습',type:'유인물',date:'4/11',link:'#'},
-  {id:3,studentId:2,name:'뉴턴 법칙 정리노트',type:'유인물',date:'4/11',link:'#'},
-  {id:4,studentId:3,name:'일차함수 개념맵',type:'유인물',date:'4/9',link:'#'},
-  {id:5,studentId:1,name:'개념원리 중3-2 추가문제',type:'교재부교재',date:'3/28',link:'#'},
-  {id:6,studentId:4,name:'경우의 수 실전문제',type:'시험지',date:'4/8',link:'#'}
+const MAT = [
+  {sid:1,nm:'유인물 #7 — 이차방정식 활용',dt:'4/13'},
+  {sid:1,nm:'유인물 #6 — 이차방정식 연습',dt:'4/11'},
+  {sid:2,nm:'뉴턴 법칙 정리노트',dt:'4/11'},
+  {sid:3,nm:'일차함수 개념맵',dt:'4/9'},
+  {sid:1,nm:'개념원리 추가문제',dt:'3/28'},
+  {sid:4,nm:'경우의 수 실전문제',dt:'4/8'}
 ];
 
-const SCHEDULE_DATA = [
-  {studentId:1,days:[1,3,5],time:'14:00'},
-  {studentId:2,days:[1,3],time:'16:00'},
-  {studentId:3,days:[2,4],time:'17:00'},
-  {studentId:4,days:[1,4,6],time:'19:00'}
+const SCHED = [
+  {sid:1,days:[1,3,5],t:'14:00'},{sid:2,days:[1,3],t:'16:00'},
+  {sid:3,days:[2,4],t:'17:00'},{sid:4,days:[1,4,6],t:'19:00'}
 ];
 
 const LESSONS = [
-  {studentId:1,date:'4/11',content:'근의 공식 대입 정확, 판별식 부호 실수 잦음. 반복 연습 필요.'},
-  {studentId:1,date:'4/8',content:'인수분해로 이차방정식 풀기 완료. 완전제곱식은 잘 하는 편.'},
-  {studentId:1,date:'4/4',content:'이차방정식 개념 도입. 흥미를 보이며 이해 빠름.'}
+  {sid:1,dt:'4/11',txt:'근의 공식 대입 정확, 판별식 부호 실수 잦음. 반복 연습.'},
+  {sid:1,dt:'4/8',txt:'인수분해 풀이 완료. 완전제곱식 잘 함.'},
+  {sid:1,dt:'4/4',txt:'이차방정식 개념 도입. 흥미 보이며 이해 빠름.'}
 ];
 
-const DAY_NAMES = ['','월','화','수','목','금','토','일'];
-const TODAY = '2026년 4월 13일 일요일';
+const DN=['','월','화','수','목','금','토','일'];
 
-// ============ NAV ============
-const NAV_ITEMS = [
-  {id:'dashboard',icon:'📊',label:'대시보드'},
-  {id:'students',icon:'👥',label:'학생 관리'},
-  {id:'upload',icon:'📤',label:'수업 녹화 업로드'},
-  {id:'reports',icon:'📝',label:'학부모 리포트'},
-  {id:'materials',icon:'📁',label:'교재/자료 관리'},
-  {id:'schedule',icon:'📅',label:'수업 일정'}
+/* ============================
+   STATE
+   ============================ */
+let pg='dashboard', detId=1, repFilter='전체', detTab='progress';
+
+function gs(id){return S.find(s=>s.id===id)}
+function ghw(sid){return HW.find(h=>h.sid===sid)}
+function hwPct(h){if(!h)return 0;const d=h.items.filter(i=>i.d).length;return Math.round(d/h.items.length*100)}
+
+/* ============================
+   NAV
+   ============================ */
+const NAV=[
+  {id:'dashboard',icon:'◉',label:'대시보드'},
+  {id:'students',icon:'◎',label:'학생'},
+  {id:'upload',icon:'△',label:'업로드'},
+  {id:'reports',icon:'▤',label:'리포트'},
+  {id:'materials',icon:'◧',label:'자료'},
+  {id:'schedule',icon:'▦',label:'일정'}
 ];
-
-let currentPage = 'dashboard';
-let currentStudentId = null;
-let reportFilter = '전체';
 
 function renderNav(){
-  document.getElementById('nav').innerHTML = NAV_ITEMS.map(n=>
-    `<a href="#" data-page="${n.id}" class="${currentPage===n.id?'active':''}" onclick="navigate('${n.id}');return false;">
-      ${n.icon} <span>${n.label}</span>
-    </a>`
-  ).join('');
+  document.getElementById('sideNav').innerHTML=NAV.map(n=>
+    `<a class="${pg===n.id||pg==='student-detail'&&n.id==='students'?'active':''}" onclick="go('${n.id}')">
+      <span class="nav-icon">${n.icon}</span><span>${n.label}</span>
+    </a>`).join('');
+  document.getElementById('bottomNav').innerHTML=NAV.map(n=>
+    `<a class="${pg===n.id||pg==='student-detail'&&n.id==='students'?'active':''}" onclick="go('${n.id}')">
+      <span class="bnav-icon">${n.icon}</span>${n.label}
+    </a>`).join('');
 }
 
-function navigate(page, studentId){
-  currentPage = page;
-  if(studentId) currentStudentId = studentId;
-  renderNav();
-  render();
+function go(p,sid){
+  pg=p; if(sid)detId=sid; detTab='progress';
+  renderNav(); render();
+  window.scrollTo({top:0,behavior:'instant'});
 }
 
-function toast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
 
-function getStudent(id){ return STUDENTS.find(s=>s.id===id); }
-
-// ============ RENDER ============
+/* ============================
+   RENDER
+   ============================ */
 function render(){
-  const app = document.getElementById('app');
-  switch(currentPage){
-    case 'dashboard': app.innerHTML = renderDashboard(); break;
-    case 'students': app.innerHTML = renderStudents(); break;
-    case 'student-detail': app.innerHTML = renderStudentDetail(); break;
-    case 'upload': app.innerHTML = renderUpload(); break;
-    case 'reports': app.innerHTML = renderReports(); break;
-    case 'materials': app.innerHTML = renderMaterials(); break;
-    case 'schedule': app.innerHTML = renderSchedule(); break;
-  }
+  const a=document.getElementById('app');
+  const r={dashboard:rDash,students:rStudents,'student-detail':rDetail,upload:rUpload,reports:rReports,materials:rMats,schedule:rSched};
+  a.innerHTML=`<div class="page active">${(r[pg]||rDash)()}</div>`;
 }
 
-// ============ DASHBOARD ============
-function renderDashboard(){
-  const pending = REPORTS.filter(r=>r.status!=='발송완료').length;
-  const hwBad = HOMEWORK.filter(h=>h.progress<50).length;
-  const todayLessons = [{time:'14:00',s:STUDENTS[0],topic:'이차방정식의 활용'},{time:'16:00',s:STUDENTS[1],topic:'뉴턴의 운동법칙'},{time:'19:00',s:STUDENTS[3],topic:'확률과 통계'}];
+/* ---- DASHBOARD ---- */
+function rDash(){
+  const pending=REP.filter(r=>r.st!=='발송완료').length;
+  const hwBad=HW.filter(h=>hwPct(h)<50).length;
+  const today=[{t:'14:00',s:S[0],topic:'이차방정식 활용'},{t:'16:00',s:S[1],topic:'뉴턴의 운동법칙'},{t:'19:00',s:S[3],topic:'확률과 통계'}];
 
   return `
-  <div class="page-header"><div><h1>대시보드</h1><div class="subtitle">${TODAY}</div></div></div>
-  <div class="stats">
-    <div class="stat-card"><div class="stat-icon" style="background:var(--primary-bg)">👥</div><div class="stat-value">${STUDENTS.length}</div><div class="stat-label">담당 학생</div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--success-bg)">✅</div><div class="stat-value">8</div><div class="stat-label">이번 주 완료 수업</div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--warning-bg)">📝</div><div class="stat-value">${pending}</div><div class="stat-label">미발송 리포트</div></div>
-    <div class="stat-card"><div class="stat-icon" style="background:var(--danger-bg)">⚠️</div><div class="stat-value">${hwBad}</div><div class="stat-label">숙제 미완료 학생</div></div>
+  <div class="page-top"><div class="page-top-row"><div><div class="heading-lg">대시보드</div><div class="page-top-sub">4월 13일 일요일</div></div></div></div>
+
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-num">${S.length}</div><div class="stat-label">담당 학생</div></div>
+    <div class="stat-item"><div class="stat-num">8</div><div class="stat-label">이번 주 수업</div></div>
+    <div class="stat-item"><div class="stat-num" style="color:var(--amber)">${pending}</div><div class="stat-label">미발송 리포트</div></div>
+    <div class="stat-item"><div class="stat-num" style="color:var(--red)">${hwBad}</div><div class="stat-label">숙제 지연</div></div>
   </div>
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-header"><h3>오늘 수업 일정</h3><button class="btn btn-sm btn-secondary" onclick="navigate('schedule')">전체보기</button></div>
-      ${todayLessons.map(l=>`
-        <div class="sched-item">
-          <div style="font-size:14px;font-weight:600;color:var(--primary);width:60px">${l.time}</div>
-          <div class="avatar-row"><div class="avatar" style="background:${l.s.color}">${l.s.initial}</div>
-          <div><div style="font-weight:500;font-size:13px">${l.s.name}</div><div style="font-size:12px;color:var(--g500)">${l.s.subject} - ${l.topic}</div></div></div>
-          <span class="badge badge-info">예정</span>
+
+  <div class="two-col">
+    <div class="section">
+      <div class="section-label">오늘 수업</div>
+      <div class="list">
+        ${today.map(l=>`<div class="list-item" onclick="go('student-detail',${l.s.id})">
+          <div class="av" style="background:${l.s.color}">${l.s.ini[0]}</div>
+          <div class="list-body">
+            <div class="list-title">${l.s.nm}</div>
+            <div class="list-sub">${l.s.sub} · ${l.topic}</div>
+          </div>
+          <div class="list-right"><span class="text-sm text-muted">${l.t}</span></div>
         </div>`).join('')}
-    </div>
-    <div class="card">
-      <div class="card-header"><h3>최근 리포트</h3><button class="btn btn-sm btn-secondary" onclick="navigate('reports')">전체보기</button></div>
-      <table><thead><tr><th>학생</th><th>날짜</th><th>상태</th></tr></thead><tbody>
-      ${REPORTS.slice(0,4).map(r=>{const s=getStudent(r.studentId);return `
-        <tr onclick="viewReport(${r.id})" style="cursor:pointer">
-          <td><div class="avatar-row"><div class="avatar" style="background:${s.color};width:26px;height:26px;font-size:10px">${s.initial}</div>${s.name}</div></td>
-          <td>${r.date}</td>
-          <td><span class="badge badge-${r.status==='발송완료'?'success':r.status==='검토중'?'warning':'danger'}">${r.status}</span></td>
-        </tr>`}).join('')}
-      </tbody></table>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header"><h3>숙제 현황</h3></div>
-    <table><thead><tr><th>학생</th><th>과목</th><th>숙제 내용</th><th>진행률</th><th>상태</th></tr></thead><tbody>
-    ${HOMEWORK.map(h=>{const s=getStudent(h.studentId);const c=h.progress>=100?'var(--success)':h.progress>0?'var(--primary)':'var(--danger)';return `
-      <tr>
-        <td><div class="avatar-row"><div class="avatar" style="background:${s.color};width:26px;height:26px;font-size:10px">${s.initial}</div>${s.name}</div></td>
-        <td>${s.subject}</td><td>${h.content}</td>
-        <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="width:100px"><div class="progress-fill" style="width:${h.progress}%;background:${c}"></div></div><span style="font-size:12px;color:var(--g500)">${h.progress}%</span></div></td>
-        <td><span class="badge badge-${h.status==='완료'?'success':h.status==='진행중'?'warning':'danger'}">${h.status}</span></td>
-      </tr>`}).join('')}
-    </tbody></table>
-  </div>`;
-}
-
-// ============ STUDENTS ============
-function renderStudents(){
-  return `
-  <div class="page-header"><div><h1>학생 관리</h1><div class="subtitle">담당 학생 목록 및 진도 관리</div></div>
-    <button class="btn btn-primary" onclick="openAddStudent()">+ 학생 추가</button></div>
-  <div class="card"><table><thead><tr><th>학생</th><th>학년</th><th>과목</th><th>진도</th><th>다음 수업</th><th>숙제</th><th></th></tr></thead><tbody>
-  ${STUDENTS.map(s=>{
-    const hw=HOMEWORK.find(h=>h.studentId===s.id);
-    const pct=Math.round(s.currentPage/s.totalPages*100);
-    return `<tr onclick="navigate('student-detail',${s.id})" style="cursor:pointer">
-      <td><div class="avatar-row"><div class="avatar" style="background:${s.color}">${s.initial}</div><div><div style="font-weight:500">${s.name}</div><div style="font-size:11px;color:var(--g500)">학부모: ${s.parent}</div></div></div></td>
-      <td>${s.grade}</td><td>${s.subject}</td>
-      <td><div style="font-size:12px">${s.textbook}<br><span style="color:var(--g500)">${s.chapter} (p.${s.currentPage}/${s.totalPages})</span></div></td>
-      <td style="font-size:12px">${s.schedule}</td>
-      <td>${hw?`<span class="badge badge-${hw.status==='완료'?'success':hw.status==='진행중'?'warning':'danger'}">${hw.status} ${hw.progress}%</span>`:'-'}</td>
-      <td><button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();navigate('student-detail',${s.id})">상세</button></td>
-    </tr>`}).join('')}
-  </tbody></table></div>`;
-}
-
-// ============ STUDENT DETAIL ============
-function renderStudentDetail(){
-  const s = getStudent(currentStudentId) || STUDENTS[0];
-  const hw = HOMEWORK.find(h=>h.studentId===s.id);
-  const mats = MATERIALS.filter(m=>m.studentId===s.id);
-  const reps = REPORTS.filter(r=>r.studentId===s.id);
-  const lessons = LESSONS.filter(l=>l.studentId===s.id);
-  const pct = Math.round(s.currentPage/s.totalPages*100);
-
-  return `
-  <div class="page-header"><div style="display:flex;align-items:center;gap:14px">
-    <button class="btn btn-secondary btn-sm" onclick="navigate('students')">← 뒤로</button>
-    <div><h1>${s.name}</h1><div class="subtitle">${s.grade} · ${s.subject} · 학부모: ${s.parent}</div></div>
-  </div></div>
-  <div class="tabs">
-    <button class="tab active" onclick="showDetailTab(this,'dt-progress')">진도 관리</button>
-    <button class="tab" onclick="showDetailTab(this,'dt-hw')">숙제</button>
-    <button class="tab" onclick="showDetailTab(this,'dt-reports')">리포트 이력</button>
-    <button class="tab" onclick="showDetailTab(this,'dt-materials')">자료</button>
-  </div>
-
-  <div id="dt-progress">
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header"><h3>현재 교재 진도</h3></div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <span style="font-weight:500">${s.textbook}</span>
-          <span style="color:var(--g500);font-size:12px">${s.currentPage} / ${s.totalPages} 페이지</span>
-        </div>
-        <div class="progress-bar" style="height:10px;margin-bottom:16px"><div class="progress-fill" style="width:${pct}%;background:var(--primary)"></div></div>
-        <div style="font-size:13px;color:var(--g600);line-height:2">
-          <div><strong>현재:</strong> ${s.chapter}</div>
-          <div><strong>메모:</strong> ${s.memo}</div>
-        </div>
       </div>
-      <div class="card">
-        <div class="card-header"><h3>수업 메모</h3></div>
-        ${lessons.map(l=>`<div style="padding:8px 0;border-bottom:1px solid var(--g100);font-size:13px">
-          <div style="font-weight:500">${l.date} 수업</div><div style="color:var(--g600)">${l.content}</div>
-        </div>`).join('')}
-        ${lessons.length===0?'<div style="color:var(--g400);font-size:13px">수업 기록이 없습니다</div>':''}
+    </div>
+
+    <div class="section">
+      <div class="section-label">리포트 현황</div>
+      <div class="list">
+        ${REP.slice(0,4).map(r=>{const s=gs(r.sid);return `<div class="list-item" onclick="viewRep(${r.id})">
+          <div class="av av-sm" style="background:${s.c}">${s.ini[0]}</div>
+          <div class="list-body">
+            <div class="list-title">${s.nm} <span class="text-xs text-faint">${r.dt}</span></div>
+            <div class="list-sub">${r.topic}</div>
+          </div>
+          <div class="list-right"><span class="tag tag-${r.st==='발송완료'?'green':r.st==='검토중'?'amber':'red'}">${r.st}</span></div>
+        </div>`}).join('')}
       </div>
     </div>
   </div>
 
-  <div id="dt-hw" style="display:none">
-    <div class="card">
-      <div class="card-header"><h3>현재 숙제</h3><button class="btn btn-sm btn-primary" onclick="toast('목업: 숙제 추가')">+ 숙제 추가</button></div>
-      ${hw?hw.items.map((item,i)=>`
-        <div class="hw-item">
-          <input type="checkbox" ${item.done?'checked':''} onchange="toggleHw(${hw.id},${i})">
-          <label style="flex:1;${item.done?'text-decoration:line-through;color:var(--g400)':''}">${item.t}</label>
-          <span class="badge badge-${item.done?'success':'warning'}">${item.done?'완료':'미완료'}</span>
-        </div>`).join(''):'<div style="color:var(--g400);font-size:13px">숙제가 없습니다</div>'}
-    </div>
-  </div>
-
-  <div id="dt-reports" style="display:none">
-    <div class="card">
-      <div class="card-header"><h3>학부모 리포트 이력</h3></div>
-      <table><thead><tr><th>날짜</th><th>수업 내용</th><th>상태</th><th></th></tr></thead><tbody>
-      ${reps.map(r=>`<tr>
-        <td>${r.date}</td><td>${r.topic}</td>
-        <td><span class="badge badge-${r.status==='발송완료'?'success':r.status==='검토중'?'warning':'danger'}">${r.status}</span></td>
-        <td><button class="btn btn-sm btn-secondary" onclick="viewReport(${r.id})">보기</button></td>
-      </tr>`).join('')}
-      </tbody></table>
-    </div>
-  </div>
-
-  <div id="dt-materials" style="display:none">
-    <div class="card">
-      <div class="card-header"><h3>Google Drive 자료</h3><button class="btn btn-sm btn-primary" onclick="toast('목업: 링크 추가')">+ 링크 추가</button></div>
-      ${mats.map(m=>`<div class="drive-item">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span>📄</span>
-          <div><div style="font-weight:500;font-size:13px">${m.name}</div><div style="font-size:11px;color:var(--g500)">${m.type} · ${m.date}</div></div>
+  <div class="section">
+    <div class="section-label">숙제 현황</div>
+    <div class="list">
+      ${HW.map(h=>{const s=gs(h.sid);const p=hwPct(h);const col=p>=100?'var(--green)':p>0?'var(--accent)':'var(--border)';return `<div class="list-item" onclick="go('student-detail',${s.id});setTimeout(()=>showDTab(document.querySelector('[data-dtab=hw]'),'hw'),50)">
+        <div class="av av-sm" style="background:${s.c}">${s.ini[0]}</div>
+        <div class="list-body">
+          <div class="list-title">${s.nm}</div>
+          <div class="list-sub">${h.content}</div>
+          <div class="prog" style="margin-top:6px;width:120px"><div class="prog-fill" style="width:${p}%;background:${col}"></div></div>
         </div>
-        <button class="btn btn-sm btn-secondary" onclick="toast('목업: Google Drive 열기')">열기</button>
-      </div>`).join('')}
-      ${mats.length===0?'<div style="color:var(--g400);font-size:13px">자료가 없습니다</div>':''}
+        <div class="list-right"><span class="tag tag-${h.status==='완료'?'green':h.status==='진행중'?'amber':'red'}">${h.status}</span></div>
+      </div>`}).join('')}
     </div>
   </div>`;
 }
 
-function showDetailTab(btn, id){
-  btn.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+/* ---- STUDENTS ---- */
+function rStudents(){
+  return `
+  <div class="page-top"><div class="page-top-row"><div class="heading-lg">학생 관리</div>
+    <button class="btn btn-accent" onclick="addStudentInline()">+ 학생 추가</button></div></div>
+
+  <div id="addStudentSlot"></div>
+
+  <div class="list">
+    ${S.map(s=>{const hw=ghw(s.id);const p=hwPct(hw);const pct=Math.round(s.cp/s.tp*100);return `<div class="list-item" onclick="go('student-detail',${s.id})">
+      <div class="av" style="background:${s.c}">${s.ini[0]}</div>
+      <div class="list-body">
+        <div class="list-title">${s.nm} <span class="text-xs text-faint">${s.gr} · ${s.sub}</span></div>
+        <div class="list-sub">${s.book} · ${s.ch}</div>
+        <div class="prog" style="margin-top:6px;max-width:160px"><div class="prog-fill" style="width:${pct}%;background:${s.c}"></div></div>
+      </div>
+      <div class="list-right">
+        ${hw?`<span class="tag tag-${hw.status==='완료'?'green':hw.status==='진행중'?'amber':'red'}">${hw.status}</span>`:''}
+      </div>
+    </div>`}).join('')}
+  </div>`;
+}
+
+function addStudentInline(){
+  const slot=document.getElementById('addStudentSlot');
+  if(slot.innerHTML){slot.innerHTML='';return}
+  slot.innerHTML=`
+  <div class="panel" style="margin-bottom:var(--s5)">
+    <div class="panel-header"><span class="heading-sm">학생 추가</span><button class="btn btn-ghost btn-sm" onclick="this.closest('.panel').remove()">취소</button></div>
+    <div class="panel-body">
+      <div class="two-col">
+        <div class="field"><label class="field-label">이름</label><input class="field-input" id="ns-nm" placeholder="학생 이름"></div>
+        <div class="field"><label class="field-label">학년</label><select class="field-input" id="ns-gr"><option>중1</option><option>중2</option><option>중3</option><option>고1</option><option>고2</option><option>고3</option></select></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label class="field-label">과목</label><input class="field-input" id="ns-sub" placeholder="수학"></div>
+        <div class="field"><label class="field-label">학부모</label><input class="field-input" id="ns-par" placeholder="학부모 이름"></div>
+      </div>
+      <div class="field"><label class="field-label">교재</label><input class="field-input" id="ns-book" placeholder="개념원리 중3-2"></div>
+      <div style="text-align:right"><button class="btn btn-accent" onclick="doAddStudent()">추가</button></div>
+    </div>
+  </div>`;
+  document.getElementById('ns-nm').focus();
+}
+
+function doAddStudent(){
+  const nm=document.getElementById('ns-nm').value||'새 학생';
+  const cols=['#7C5CFC','#06A5A5','#D4577A','#84A816','#E07830'];
+  S.push({id:S.length+1,nm,ini:nm,c:cols[S.length%cols.length],gr:document.getElementById('ns-gr').value,sub:document.getElementById('ns-sub').value||'수학',par:document.getElementById('ns-par').value||'-',book:document.getElementById('ns-book').value||'-',cp:0,tp:100,ch:'-',sched:'-',memo:''});
+  render(); toast(nm+' 추가됨');
+}
+
+/* ---- STUDENT DETAIL ---- */
+function rDetail(){
+  const s=gs(detId)||S[0], hw=ghw(s.id), mats=MAT.filter(m=>m.sid===s.id), reps=REP.filter(r=>r.sid===s.id), les=LESSONS.filter(l=>l.sid===s.id);
+  const pct=Math.round(s.cp/s.tp*100);
+
+  return `
+  <a class="back-link" onclick="go('students')">← 학생 목록</a>
+  <div class="page-top" style="margin-bottom:var(--s5)">
+    <div style="display:flex;align-items:center;gap:var(--s4)">
+      <div class="av" style="background:${s.c};width:44px;height:44px;font-size:1rem">${s.ini[0]}</div>
+      <div><div class="heading-lg">${s.nm}</div><div class="page-top-sub">${s.gr} · ${s.sub} · 학부모 ${s.par}</div></div>
+    </div>
+  </div>
+
+  <div class="dtabs">
+    <button class="dtab ${detTab==='progress'?'active':''}" data-dtab="progress" onclick="showDTab(this,'progress')">진도</button>
+    <button class="dtab ${detTab==='hw'?'active':''}" data-dtab="hw" onclick="showDTab(this,'hw')">숙제</button>
+    <button class="dtab ${detTab==='reports'?'active':''}" data-dtab="reports" onclick="showDTab(this,'reports')">리포트</button>
+    <button class="dtab ${detTab==='materials'?'active':''}" data-dtab="materials" onclick="showDTab(this,'materials')">자료</button>
+  </div>
+
+  <div id="dtc-progress" class="dtc" ${detTab!=='progress'?'style="display:none"':''}>
+    <div class="two-col">
+      <div>
+        <div class="section-label">교재 진도</div>
+        <div class="panel">
+          <div class="panel-body">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:var(--s2)">
+              <span class="heading-sm">${s.book}</span>
+              <span class="text-xs text-faint">${s.cp}/${s.tp}p (${pct}%)</span>
+            </div>
+            <div class="prog" style="height:6px;margin-bottom:var(--s4)"><div class="prog-fill" style="width:${pct}%;background:${s.c}"></div></div>
+            <div class="text-sm" style="line-height:2;color:var(--text-secondary)">
+              <div><strong>단원</strong> ${s.ch}</div>
+              <div><strong>일정</strong> ${s.sched}</div>
+              <div><strong>메모</strong> ${s.memo||'—'}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">수업 기록</div>
+        <div class="panel"><div class="panel-body">
+          ${les.length?les.map(l=>`<div style="padding:var(--s3) 0;border-bottom:1px solid var(--border-light)">
+            <div class="text-sm" style="font-weight:550">${l.dt}</div>
+            <div class="text-sm text-muted">${l.txt}</div>
+          </div>`).join(''):'<div class="text-sm text-faint">기록 없음</div>'}
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="dtc-hw" class="dtc" ${detTab!=='hw'?'style="display:none"':''}>
+    <div class="panel">
+      <div class="panel-header"><span class="heading-sm">숙제</span><button class="btn btn-soft btn-sm" onclick="toast('목업: 숙제 추가')">+ 추가</button></div>
+      <div class="panel-body">
+        ${hw?hw.items.map((it,i)=>`<div class="check-row ${it.d?'is-done':''}" onclick="toggleHw(${hw.id},${i})">
+          <input type="checkbox" ${it.d?'checked':''} onclick="event.stopPropagation();" onchange="toggleHw(${hw.id},${i})">
+          <label style="flex:1;cursor:pointer">${it.t}</label>
+          <span class="tag tag-${it.d?'green':'amber'}">${it.d?'완료':'미완료'}</span>
+        </div>`).join(''):'<div class="text-sm text-faint" style="padding:var(--s4) 0">숙제 없음</div>'}
+      </div>
+    </div>
+  </div>
+
+  <div id="dtc-reports" class="dtc" ${detTab!=='reports'?'style="display:none"':''}>
+    <div class="list">
+      ${reps.length?reps.map(r=>`<div class="list-item" onclick="viewRep(${r.id})">
+        <div class="list-body">
+          <div class="list-title">${r.dt} <span class="text-faint">·</span> ${r.topic}</div>
+        </div>
+        <div class="list-right"><span class="tag tag-${r.st==='발송완료'?'green':r.st==='검토중'?'amber':'red'}">${r.st}</span></div>
+      </div>`).join(''):'<div style="padding:var(--s5)" class="text-sm text-faint">리포트 없음</div>'}
+    </div>
+  </div>
+
+  <div id="dtc-materials" class="dtc" ${detTab!=='materials'?'style="display:none"':''}>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--s3)">
+      <div class="section-label" style="margin:0">Google Drive 자료</div>
+      <button class="btn btn-soft btn-sm" onclick="toast('목업: 링크 추가')">+ 추가</button>
+    </div>
+    ${mats.length?mats.map(m=>`<div class="drive-row">
+      <span style="opacity:.5">📄</span>
+      <div style="flex:1;min-width:0"><div class="text-sm" style="font-weight:550">${m.nm}</div><div class="text-xs text-faint">${m.dt}</div></div>
+      <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toast('목업: Drive 열기')">열기</button>
+    </div>`).join(''):'<div class="text-sm text-faint">자료 없음</div>'}
+  </div>`;
+}
+
+function showDTab(btn,tab){
+  detTab=tab;
+  btn.closest('.dtabs').querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
-  ['dt-progress','dt-hw','dt-reports','dt-materials'].forEach(t=>{
-    const el=document.getElementById(t);if(el)el.style.display=t===id?'block':'none';
-  });
+  document.querySelectorAll('.dtc').forEach(c=>c.style.display='none');
+  const el=document.getElementById('dtc-'+tab);if(el)el.style.display='block';
 }
 
-function toggleHw(hwId, itemIdx){
-  const hw=HOMEWORK.find(h=>h.id===hwId);
-  if(hw){
-    hw.items[itemIdx].done=!hw.items[itemIdx].done;
-    const done=hw.items.filter(i=>i.done).length;
-    hw.progress=Math.round(done/hw.items.length*100);
-    hw.status=hw.progress===100?'완료':hw.progress>0?'진행중':'미시작';
-    render();
-    toast(hw.items[itemIdx].done?'숙제 항목 완료!':'숙제 항목 미완료로 변경');
-  }
+function toggleHw(hid,idx){
+  const h=HW.find(x=>x.id===hid);if(!h)return;
+  h.items[idx].d=!h.items[idx].d;
+  const d=h.items.filter(i=>i.d).length;
+  h.status=d===h.items.length?'완료':d>0?'진행중':'미시작';
+  render(); toast(h.items[idx].d?'완료 처리':'미완료로 변경');
 }
 
-// ============ UPLOAD ============
-function renderUpload(){
+/* ---- UPLOAD ---- */
+function rUpload(){
   return `
-  <div class="page-header"><div><h1>수업 녹화 업로드</h1><div class="subtitle">수업 녹화 파일을 업로드하면 AI가 자동으로 리포트를 생성합니다</div></div></div>
-  <div class="card" id="upload-form">
-    <div class="grid-2">
-      <div class="form-group"><label>학생 선택</label>
-        <select class="form-input" id="sel-student">
-          <option value="">선택하세요</option>
-          ${STUDENTS.map(s=>`<option value="${s.id}">${s.name} (${s.grade} · ${s.subject})</option>`).join('')}
-        </select>
+  <div class="page-top"><div class="heading-lg">수업 녹화 업로드</div><div class="page-top-sub">녹화 파일 → AI 리포트 자동 생성</div></div>
+  <div id="uForm">
+    <div class="two-col" style="margin-bottom:var(--s5)">
+      <div class="field"><label class="field-label">학생</label>
+        <select class="field-input" id="uSel"><option value="">선택</option>${S.map(s=>`<option value="${s.id}">${s.nm} (${s.gr} · ${s.sub})</option>`).join('')}</select>
       </div>
-      <div class="form-group"><label>수업 날짜</label><input type="date" class="form-input" value="2026-04-13"></div>
+      <div class="field"><label class="field-label">날짜</label><input type="date" class="field-input" value="2026-04-13"></div>
     </div>
-    <div class="upload-area" onclick="startUpload()">
-      <div class="icon">📤</div>
-      <div class="upload-main">클릭하여 녹화 파일 업로드</div>
-      <div class="upload-sub">MP4, WebM, MKV (최대 2시간) — 목업에서는 클릭만 하면 시뮬레이션됩니다</div>
+    <div class="upload-zone" onclick="startU()">
+      <div class="upload-icon">△</div>
+      <div class="heading-sm">녹화 파일 업로드</div>
+      <div class="text-sm text-muted" style="margin-top:var(--s1)">MP4, WebM, MKV · 최대 2시간</div>
+      <div class="text-xs text-faint" style="margin-top:var(--s3)">목업에서는 클릭하면 시뮬레이션됩니다</div>
     </div>
   </div>
-  <div class="card" id="upload-progress" style="display:none">
-    <h3>수업 분석 중...</h3>
-    <p style="color:var(--g500);font-size:13px;margin:4px 0 16px" id="upload-info"></p>
-    <div class="process-steps" id="process-steps"></div>
-    <div class="progress-bar" style="height:10px"><div class="progress-fill" id="total-progress" style="width:0%;background:var(--primary)"></div></div>
-    <div style="text-align:center;margin-top:6px;font-size:12px;color:var(--g500)">예상 소요시간: 약 3분</div>
-  </div>
-  <div class="card" id="upload-done" style="display:none"></div>`;
+  <div id="uProc" style="display:none"></div>
+  <div id="uDone" style="display:none"></div>`;
 }
 
-const STEPS=[
-  {text:'음성 추출',sub:'mp4에서 오디오 트랙 분리'},
-  {text:'30초 청크 분할',sub:'청크 생성'},
-  {text:'음성 인식 (Gemma 4 E4B)',sub:'한국어 STT 처리중...'},
-  {text:'수업 내용 요약 (Gemma 4 27B)',sub:'내용 분석중...'},
-  {text:'학부모 리포트 생성',sub:'리포트 작성중...'}
+const PSTEPS=[
+  {t:'음성 추출',s:'mp4 → 오디오 분리'},
+  {t:'30초 청크 분할',s:'청크 생성'},
+  {t:'음성 인식',s:'Gemma 4 E4B · 한국어 STT'},
+  {t:'수업 요약',s:'Gemma 4 27B'},
+  {t:'리포트 생성',s:'학부모 리포트 작성'}
 ];
 
-function startUpload(){
-  const sid=document.getElementById('sel-student').value;
-  if(!sid){toast('학생을 먼저 선택해주세요');return;}
-  const s=getStudent(parseInt(sid));
+function startU(){
+  const v=document.getElementById('uSel').value;
+  if(!v){toast('학생을 선택해주세요');return}
+  const s=gs(+v);
+  document.getElementById('uForm').style.display='none';
+  const proc=document.getElementById('uProc');proc.style.display='block';
+  proc.innerHTML=`<div class="panel"><div class="panel-header"><span class="heading-sm">분석 중</span><span class="text-xs text-faint">${s.nm} · 4/13</span></div>
+    <div class="panel-body"><div class="steps" id="uSteps">${PSTEPS.map((p,i)=>`<div class="step" id="us${i}"><div class="step-dot">${i+1}</div><div><div class="text-sm" style="font-weight:550">${p.t}</div><div class="text-xs text-faint">${p.s}</div></div></div>`).join('')}</div></div></div>`;
 
-  document.getElementById('upload-form').style.display='none';
-  document.getElementById('upload-progress').style.display='block';
-  document.getElementById('upload-info').textContent=`${s.name} · 2026.04.13 수업`;
-
-  const stepsEl=document.getElementById('process-steps');
-  stepsEl.innerHTML=STEPS.map((st,i)=>`
-    <div class="process-step" id="pstep-${i}">
-      <div class="step-icon" id="picon-${i}">${i+1}</div>
-      <div><div class="step-text">${st.text}</div><div class="step-sub" id="psub-${i}">${st.sub}</div></div>
-    </div>`).join('');
-
-  let step=0;
-  const pcts=[20,40,70,90,100];
-  const subs=['오디오 트랙 분리 완료','237개 청크 생성 완료','237/237 청크 처리 완료','요약 완료','리포트 작성 완료'];
-
-  function advance(){
-    if(step>0){
-      const prev=step-1;
-      document.getElementById('pstep-'+prev).className='process-step done';
-      document.getElementById('picon-'+prev).innerHTML='✓';
-      document.getElementById('psub-'+prev).textContent=subs[prev];
-    }
-    if(step<STEPS.length){
-      document.getElementById('pstep-'+step).className='process-step active';
-      document.getElementById('picon-'+step).innerHTML='<span class="spinner"></span>';
-      document.getElementById('total-progress').style.width=pcts[step]+'%';
-      step++;
-      setTimeout(advance, 800+Math.random()*400);
-    } else {
-      showUploadDone(s);
-    }
+  let i=0;const subs=['분리 완료','237개 청크','237/237 완료','요약 완료','작성 완료'];
+  function next(){
+    if(i>0){const p=document.getElementById('us'+(i-1));p.className='step is-done';p.querySelector('.step-dot').textContent='✓';p.querySelector('.text-xs').textContent=subs[i-1]}
+    if(i<PSTEPS.length){const c=document.getElementById('us'+i);c.className='step is-active';c.querySelector('.step-dot').innerHTML='<span class="spinner"></span>';i++;setTimeout(next,600+Math.random()*300)}
+    else{proc.style.display='none';showUDone(s)}
   }
-  advance();
+  next();
 }
 
-function showUploadDone(s){
-  document.getElementById('upload-progress').style.display='none';
-  const done=document.getElementById('upload-done');
-  done.style.display='block';
-
-  const report = REPORTS.find(r=>r.studentId===s.id) || REPORTS[0];
-  done.innerHTML=`
-    <div style="text-align:center;padding:12px 0">
-      <div style="font-size:40px">✅</div>
-      <h3 style="margin-top:8px">리포트 생성 완료!</h3>
-      <p style="color:var(--g500);font-size:13px;margin-top:4px">${s.name} · 2026.04.13 수업</p>
+function showUDone(s){
+  const r=REP.find(x=>x.sid===s.id)||REP[0];
+  const d=document.getElementById('uDone');d.style.display='block';
+  d.innerHTML=`<div class="panel">
+    <div class="panel-header"><span class="heading-sm">리포트 완성</span><span class="tag tag-green">생성 완료</span></div>
+    <div class="panel-body">
+      <div class="text-sm text-muted" style="margin-bottom:var(--s4)">${s.nm} · 4월 13일</div>
+      <div class="report-text">${r.txt}</div>
+      <div style="display:flex;gap:var(--s3);margin-top:var(--s5);flex-wrap:wrap">
+        <button class="btn btn-accent" onclick="copyR(\`${r.txt.replace(/`/g,"'")}\`)">리포트 복사</button>
+        <button class="btn btn-soft" onclick="toast('목업: 수정 모드')">수정</button>
+        <button class="btn btn-soft" onclick="toast('목업: 진도 업데이트')">진도 반영</button>
+      </div>
     </div>
-    <div class="report-preview" style="margin-top:16px">${report.text}</div>
-    <div style="display:flex;gap:10px;margin-top:16px;justify-content:center;flex-wrap:wrap">
-      <button class="btn btn-secondary" onclick="toast('목업: 리포트 수정 모드')">수정하기</button>
-      <button class="btn btn-primary" onclick="copyReport(\`${report.text.replace(/`/g,"'")}\`)">리포트 복사</button>
-      <button class="btn btn-success" onclick="toast('목업: 진도 & 숙제 자동 업데이트 완료!')">진도 & 숙제 업데이트</button>
-    </div>`;
+  </div>`;
 }
 
-function copyReport(text){
-  navigator.clipboard.writeText(text).then(()=>toast('리포트가 클립보드에 복사되었습니다!')).catch(()=>toast('복사 완료 (목업)'));
-}
+function copyR(t){navigator.clipboard.writeText(t).then(()=>toast('클립보드에 복사됨')).catch(()=>toast('복사 완료 (목업)'))}
 
-// ============ REPORTS ============
-function renderReports(){
-  const filters=['전체','미발송','검토중','발송완료'];
-  const filtered = reportFilter==='전체'?REPORTS:REPORTS.filter(r=>r.status===reportFilter);
-
+/* ---- REPORTS ---- */
+function rReports(){
+  const fs=['전체','미발송','검토중','발송완료'];
+  const list=repFilter==='전체'?REP:REP.filter(r=>r.st===repFilter);
   return `
-  <div class="page-header"><div><h1>학부모 리포트</h1><div class="subtitle">AI가 생성한 리포트를 검토하고 발송하세요</div></div></div>
-  <div class="tabs">
-    ${filters.map(f=>{
-      const cnt=f==='전체'?REPORTS.length:REPORTS.filter(r=>r.status===f).length;
-      return `<button class="tab ${reportFilter===f?'active':''}" onclick="reportFilter='${f}';render()">${f} (${cnt})</button>`;
-    }).join('')}
+  <div class="page-top"><div class="heading-lg">학부모 리포트</div></div>
+  <div class="dtabs" style="margin-bottom:var(--s5)">
+    ${fs.map(f=>{const n=f==='전체'?REP.length:REP.filter(r=>r.st===f).length;return `<button class="dtab ${repFilter===f?'active':''}" onclick="repFilter='${f}';render()">${f} (${n})</button>`}).join('')}
   </div>
-  <div class="card"><table><thead><tr><th>학생</th><th>수업일</th><th>주요 내용</th><th>상태</th><th></th></tr></thead><tbody>
-  ${filtered.map(r=>{const s=getStudent(r.studentId);return `<tr>
-    <td><div class="avatar-row"><div class="avatar" style="background:${s.color};width:26px;height:26px;font-size:10px">${s.initial}</div>${s.name}</div></td>
-    <td>${r.date}</td><td>${r.topic}</td>
-    <td><span class="badge badge-${r.status==='발송완료'?'success':r.status==='검토중'?'warning':'danger'}">${r.status}</span></td>
-    <td><div style="display:flex;gap:6px">
-      <button class="btn btn-sm btn-secondary" onclick="viewReport(${r.id})">보기</button>
-      ${r.status!=='발송완료'?`<button class="btn btn-sm btn-primary" onclick="sendReport(${r.id})">발송</button>`:''}
-    </div></td>
-  </tr>`}).join('')}
-  </tbody></table></div>`;
-}
-
-function viewReport(id){
-  const r=REPORTS.find(rr=>rr.id===id);if(!r)return;
-  const s=getStudent(r.studentId);
-  document.getElementById('modals').innerHTML=`
-  <div class="modal-overlay active" onclick="if(event.target===this)this.classList.remove('active')">
-    <div class="modal" style="width:600px">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <h2>${s.name} · ${r.date} 리포트</h2>
-        <span class="badge badge-${r.status==='발송완료'?'success':r.status==='검토중'?'warning':'danger'}">${r.status}</span>
+  <div class="list">
+    ${list.map(r=>{const s=gs(r.sid);return `<div class="list-item" onclick="viewRep(${r.id})">
+      <div class="av av-sm" style="background:${s.c}">${s.ini[0]}</div>
+      <div class="list-body">
+        <div class="list-title">${s.nm} <span class="text-xs text-faint">${r.dt}</span></div>
+        <div class="list-sub">${r.topic}</div>
       </div>
-      <div class="report-preview">${r.text}</div>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="copyReport(\`${r.text.replace(/`/g,"'")}\`)">복사</button>
-        ${r.status!=='발송완료'?`<button class="btn btn-primary" onclick="sendReport(${r.id});document.querySelector('.modal-overlay').classList.remove('active')">발송 처리</button>`:''}
-        <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').classList.remove('active')">닫기</button>
+      <div class="list-right" style="gap:var(--s2)">
+        <span class="tag tag-${r.st==='발송완료'?'green':r.st==='검토중'?'amber':'red'}">${r.st}</span>
+        ${r.st!=='발송완료'?`<button class="btn btn-accent btn-sm" onclick="event.stopPropagation();sendRep(${r.id})">발송</button>`:''}
       </div>
-    </div>
+    </div>`}).join('')}
   </div>`;
 }
 
-function sendReport(id){
-  const r=REPORTS.find(rr=>rr.id===id);
-  if(r){r.status='발송완료';render();toast(`리포트 발송 완료! (목업)`);}
+function viewRep(id){
+  const r=REP.find(x=>x.id===id);if(!r)return;const s=gs(r.sid);
+  /* inline expand at top of content */
+  const existing=document.getElementById('repView');if(existing)existing.remove();
+  const div=document.createElement('div');div.id='repView';
+  div.innerHTML=`<div class="panel" style="margin-bottom:var(--s5)">
+    <div class="panel-header">
+      <div><span class="heading-sm">${s.nm} · ${r.dt}</span> <span class="tag tag-${r.st==='발송완료'?'green':r.st==='검토중'?'amber':'red'}" style="margin-left:var(--s2)">${r.st}</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="this.closest('#repView').remove()">닫기</button>
+    </div>
+    <div class="panel-body">
+      <div class="report-text">${r.txt}</div>
+      <div style="display:flex;gap:var(--s3);margin-top:var(--s4);flex-wrap:wrap">
+        <button class="btn btn-accent btn-sm" onclick="copyR(\`${r.txt.replace(/`/g,"'")}\`)">복사</button>
+        ${r.st!=='발송완료'?`<button class="btn btn-soft btn-sm" onclick="sendRep(${r.id});this.closest('#repView').remove()">발송 처리</button>`:''}
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('app').querySelector('.page').prepend(div);
+  div.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ============ MATERIALS ============
-function renderMaterials(){
+function sendRep(id){const r=REP.find(x=>x.id===id);if(r){r.st='발송완료';render();toast('발송 완료')}}
+
+/* ---- MATERIALS ---- */
+function rMats(){
   return `
-  <div class="page-header"><div><h1>교재/자료 관리</h1><div class="subtitle">학생별 교재 진도와 Google Drive 자료를 관리하세요</div></div>
-    <button class="btn btn-primary" onclick="toast('목업: 자료 추가')">+ 자료 추가</button></div>
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-header"><h3>교재별 진도 현황</h3></div>
-      ${STUDENTS.map(s=>{const pct=Math.round(s.currentPage/s.totalPages*100);return `
-        <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--g100)">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <div><div style="font-weight:500;font-size:13px">${s.textbook}</div><div style="font-size:11px;color:var(--g500)">${s.name}</div></div>
-            <span style="font-size:12px;color:var(--g500)">${pct}%</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${s.color}"></div></div>
-        </div>`}).join('')}
+  <div class="page-top"><div class="page-top-row"><div class="heading-lg">교재 · 자료</div>
+    <button class="btn btn-soft" onclick="toast('목업: 자료 추가')">+ 추가</button></div></div>
+  <div class="two-col">
+    <div>
+      <div class="section-label">교재 진도</div>
+      ${S.map(s=>{const p=Math.round(s.cp/s.tp*100);return `<div style="margin-bottom:var(--s5);cursor:pointer" onclick="go('student-detail',${s.id})">
+        <div style="display:flex;justify-content:space-between;margin-bottom:var(--s1)">
+          <div class="text-sm" style="font-weight:550">${s.book}</div>
+          <div class="text-xs text-faint">${p}%</div>
+        </div>
+        <div class="text-xs text-faint" style="margin-bottom:var(--s1)">${s.nm}</div>
+        <div class="prog"><div class="prog-fill" style="width:${p}%;background:${s.c}"></div></div>
+      </div>`}).join('')}
     </div>
-    <div class="card">
-      <div class="card-header"><h3>최근 업로드 자료</h3></div>
-      ${MATERIALS.map(m=>{const s=getStudent(m.studentId);return `
-        <div class="drive-item">
-          <div style="display:flex;align-items:center;gap:8px">
-            <span>📄</span>
-            <div><div style="font-weight:500;font-size:13px">${m.name}</div><div style="font-size:11px;color:var(--g500)">${s?s.name:''} · ${m.date}</div></div>
-          </div>
-          <button class="btn btn-sm btn-secondary" onclick="toast('목업: Google Drive 열기')">열기</button>
-        </div>`}).join('')}
+    <div>
+      <div class="section-label">최근 자료</div>
+      ${MAT.map(m=>{const s=gs(m.sid);return `<div class="drive-row">
+        <span style="opacity:.4">📄</span>
+        <div style="flex:1;min-width:0"><div class="text-sm" style="font-weight:550">${m.nm}</div><div class="text-xs text-faint">${s?s.nm:''} · ${m.dt}</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toast('목업: Drive 열기')">열기</button>
+      </div>`}).join('')}
     </div>
   </div>`;
 }
 
-// ============ SCHEDULE ============
-function renderSchedule(){
+/* ---- SCHEDULE ---- */
+function rSched(){
   const times=['14:00','16:00','17:00','19:00'];
-  const days=[1,2,3,4,5,6,7];
-
   return `
-  <div class="page-header"><div><h1>수업 일정</h1><div class="subtitle">이번 주 수업 일정</div></div>
-    <button class="btn btn-primary" onclick="toast('목업: 수업 추가')">+ 수업 추가</button></div>
-  <div class="card">
-    <div class="sched-grid">
-      <div class="sched-head"></div>
-      ${days.map(d=>`<div class="sched-head">${DAY_NAMES[d]} (4/${12+d})</div>`).join('')}
-      ${times.map(time=>`
-        <div class="sched-time">${time}</div>
-        ${days.map(day=>{
-          const match=SCHEDULE_DATA.find(sc=>sc.time===time&&sc.days.includes(day));
-          if(match){
-            const s=getStudent(match.studentId);
-            return `<div class="sched-cell"><div class="sched-block" style="background:${s.color}15;border-color:${s.color};cursor:pointer" onclick="navigate('student-detail',${s.id})"><div style="font-weight:600">${s.name}</div><div style="color:var(--g500)">${s.subject}</div></div></div>`;
-          }
-          return '<div class="sched-cell"></div>';
-        }).join('')}
-      `).join('')}
-    </div>
+  <div class="page-top"><div class="page-top-row"><div class="heading-lg">수업 일정</div>
+    <button class="btn btn-soft" onclick="toast('목업: 수업 추가')">+ 추가</button></div></div>
+  <div class="sched">
+    <div class="sched-h"></div>${[1,2,3,4,5,6,7].map(d=>`<div class="sched-h">${DN[d]} ${12+d}</div>`).join('')}
+    ${times.map(t=>`<div class="sched-t">${t}</div>${[1,2,3,4,5,6,7].map(d=>{
+      const m=SCHED.find(sc=>sc.t===t&&sc.days.includes(d));
+      if(m){const s=gs(m.sid);return `<div class="sched-c"><div class="sched-block" style="background:${s.c}18;color:${s.c}" onclick="go('student-detail',${s.id})">${s.nm}<br><span style="opacity:.6">${s.sub}</span></div></div>`}
+      return '<div class="sched-c"></div>';
+    }).join('')}`).join('')}
   </div>`;
 }
 
-// ============ ADD STUDENT MODAL ============
-function openAddStudent(){
-  document.getElementById('modals').innerHTML=`
-  <div class="modal-overlay active" onclick="if(event.target===this)this.classList.remove('active')">
-    <div class="modal">
-      <h2>학생 추가</h2>
-      <div class="grid-2">
-        <div class="form-group"><label>학생 이름</label><input type="text" class="form-input" id="ns-name" placeholder="홍길동"></div>
-        <div class="form-group"><label>학년</label><select class="form-input" id="ns-grade"><option>중1</option><option>중2</option><option>중3</option><option>고1</option><option>고2</option><option>고3</option></select></div>
-      </div>
-      <div class="grid-2">
-        <div class="form-group"><label>과목</label><input type="text" class="form-input" id="ns-subject" placeholder="수학"></div>
-        <div class="form-group"><label>학부모 이름</label><input type="text" class="form-input" id="ns-parent" placeholder="홍부모"></div>
-      </div>
-      <div class="form-group"><label>사용 교재</label><input type="text" class="form-input" id="ns-textbook" placeholder="개념원리 중3-2"></div>
-      <div class="form-group"><label>수업 요일/시간</label><input type="text" class="form-input" id="ns-schedule" placeholder="월/수/금 14:00"></div>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').classList.remove('active')">취소</button>
-        <button class="btn btn-primary" onclick="addStudent()">추가</button>
-      </div>
-    </div>
-  </div>`;
-}
-
-function addStudent(){
-  const name=document.getElementById('ns-name').value||'새 학생';
-  const colors=['#8B5CF6','#06B6D4','#F43F5E','#84CC16','#F97316'];
-  STUDENTS.push({
-    id:STUDENTS.length+1,name,initial:name[0],color:colors[STUDENTS.length%colors.length],
-    grade:document.getElementById('ns-grade').value,
-    subject:document.getElementById('ns-subject').value||'수학',
-    parent:document.getElementById('ns-parent').value||'-',
-    textbook:document.getElementById('ns-textbook').value||'-',
-    currentPage:0,totalPages:100,chapter:'-',
-    schedule:document.getElementById('ns-schedule').value||'-',memo:''
-  });
-  document.querySelector('.modal-overlay').classList.remove('active');
-  render();
-  toast(`${name} 학생이 추가되었습니다! (목업)`);
-}
-
-// ============ INIT ============
-renderNav();
-render();
+/* ============================
+   INIT
+   ============================ */
+renderNav(); render();
 </script>
 </body>
 </html>
