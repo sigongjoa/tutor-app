@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TutorFlow - 과외 관리 시스템</title>
+<style>
+  :root {
+    --primary: #4F46E5;
+    --primary-light: #818CF8;
+    --primary-bg: #EEF2FF;
+    --success: #10B981;
+    --success-bg: #D1FAE5;
+    --warning: #F59E0B;
+    --warning-bg: #FEF3C7;
+    --danger: #EF4444;
+    --danger-bg: #FEE2E2;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-400: #9CA3AF;
+    --gray-500: #6B7280;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --gray-800: #1F2937;
+    --gray-900: #111827;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    background: var(--gray-900);
+    color: white;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+  .sidebar .logo {
+    font-size: 22px;
+    font-weight: 700;
+    padding: 0 12px 24px;
+    border-bottom: 1px solid var(--gray-700);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sidebar .logo span { color: var(--primary-light); }
+  .sidebar nav { flex: 1; }
+  .sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    color: var(--gray-400);
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    font-size: 15px;
+    transition: all 0.15s;
+  }
+  .sidebar nav a:hover { background: var(--gray-700); color: white; }
+  .sidebar nav a.active { background: var(--primary); color: white; }
+  .sidebar nav a svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .sidebar .user-info {
+    border-top: 1px solid var(--gray-700);
+    padding-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sidebar .user-avatar {
+    width: 36px; height: 36px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 14px;
+  }
+  .sidebar .user-name { font-size: 14px; font-weight: 500; }
+  .sidebar .user-role { font-size: 12px; color: var(--gray-400); }
+
+  /* Main content */
+  .main { margin-left: 260px; flex: 1; padding: 32px; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Header */
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+  .page-header h1 { font-size: 26px; font-weight: 700; }
+  .page-header .subtitle { color: var(--gray-500); font-size: 14px; margin-top: 4px; }
+
+  /* Cards */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .card-header h3 { font-size: 16px; font-weight: 600; }
+
+  /* Stat cards */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+  .stat-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+  }
+  .stat-card .stat-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px;
+  }
+  .stat-card .stat-value { font-size: 28px; font-weight: 700; }
+  .stat-card .stat-label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+
+  /* Buttons */
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: #4338CA; }
+  .btn-secondary { background: var(--gray-100); color: var(--gray-700); }
+  .btn-secondary:hover { background: var(--gray-200); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-sm { padding: 6px 14px; font-size: 13px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500); padding: 12px 16px; border-bottom: 1px solid var(--gray-200); }
+  td { padding: 14px 16px; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
+  tr:hover td { background: var(--gray-50); }
+
+  /* Badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .badge-success { background: var(--success-bg); color: #065F46; }
+  .badge-warning { background: var(--warning-bg); color: #92400E; }
+  .badge-danger { background: var(--danger-bg); color: #991B1B; }
+  .badge-info { background: var(--primary-bg); color: #3730A3; }
+
+  /* Avatar */
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 13px; color: white;
+    flex-shrink: 0;
+  }
+  .avatar-row { display: flex; align-items: center; gap: 12px; }
+
+  /* Upload area */
+  .upload-area {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius);
+    padding: 48px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--gray-50);
+  }
+  .upload-area:hover { border-color: var(--primary); background: var(--primary-bg); }
+  .upload-area svg { width: 48px; height: 48px; color: var(--gray-400); margin-bottom: 12px; }
+  .upload-area p { color: var(--gray-500); font-size: 14px; }
+  .upload-area .upload-main { font-size: 16px; font-weight: 500; color: var(--gray-700); margin-bottom: 4px; }
+
+  /* Progress */
+  .progress-bar { background: var(--gray-200); border-radius: 8px; height: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 8px; transition: width 0.6s ease; }
+
+  /* Forms */
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--gray-700); }
+  .form-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border 0.15s;
+  }
+  .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+  select.form-input { appearance: auto; }
+  textarea.form-input { resize: vertical; min-height: 120px; }
+
+  /* Grid layout */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  /* Today schedule */
+  .schedule-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .schedule-item:last-child { border-bottom: none; }
+  .schedule-time {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary);
+    width: 70px;
+    flex-shrink: 0;
+  }
+  .schedule-info { flex: 1; }
+  .schedule-info .name { font-weight: 500; font-size: 14px; }
+  .schedule-info .subject { font-size: 13px; color: var(--gray-500); }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    width: 560px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+  }
+  .modal h2 { font-size: 20px; margin-bottom: 24px; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+
+  /* Report preview */
+  .report-preview {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  /* Processing steps */
+  .process-steps { display: flex; flex-direction: column; gap: 16px; margin: 24px 0; }
+  .process-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: var(--gray-50);
+    border-radius: 10px;
+  }
+  .process-step.active { background: var(--primary-bg); }
+  .process-step.done { background: var(--success-bg); }
+  .step-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--gray-200);
+    font-size: 14px; font-weight: 600;
+  }
+  .process-step.active .step-icon { background: var(--primary); color: white; }
+  .process-step.done .step-icon { background: var(--success); color: white; }
+  .step-text { font-size: 14px; font-weight: 500; }
+  .step-sub { font-size: 12px; color: var(--gray-500); }
+
+  /* Homework checklist */
+  .hw-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .hw-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); }
+  .hw-item.checked label { text-decoration: line-through; color: var(--gray-400); }
+
+  /* Tab bar */
+  .tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--gray-200); }
+  .tab {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-500);
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+  }
+  .tab:hover { color: var(--gray-700); }
+  .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+  /* Drive links */
+  .drive-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--gray-50);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .drive-item:hover { background: var(--gray-100); }
+  .drive-icon { color: var(--warning); margin-right: 10px; }
+
+  /* Spinner */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner {
+    width: 20px; height: 20px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="logo">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    <span>TutorFlow</span>
+  </div>
+  <nav>
+    <a href="#" data-page="dashboard" class="active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      대시보드
+    </a>
+    <a href="#" data-page="students">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      학생 관리
+    </a>
+    <a href="#" data-page="upload">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      수업 녹화 업로드
+    </a>
+    <a href="#" data-page="reports">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      학부모 리포트
+    </a>
+    <a href="#" data-page="materials">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      교재/자료 관리
+    </a>
+    <a href="#" data-page="schedule">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      수업 일정
+    </a>
+  </nav>
+  <div class="user-info">
+    <div class="user-avatar">김</div>
+    <div>
+      <div class="user-name">김선생</div>
+      <div class="user-role">수학 / 과학</div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+  <!-- ==================== Dashboard ==================== -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div>
+        <h1>대시보드</h1>
+        <div class="subtitle">2026년 4월 13일 일요일</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--primary-bg);">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div class="stat-value">12</div>
+        <div class="stat-label">담당 학생</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--success-bg);">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--success)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="stat-value">8</div>
+        <div class="stat-label">이번 주 완료 수업</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--warning-bg);">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="stat-value">3</div>
+        <div class="stat-label">미발송 리포트</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background: var(--danger-bg);">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--danger)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="stat-value">2</div>
+        <div class="stat-label">숙제 미완료 학생</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <h3>오늘 수업 일정</h3>
+          <button class="btn btn-sm btn-secondary" onclick="navigate('schedule')">전체보기</button>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">14:00</div>
+          <div class="avatar-row">
+            <div class="avatar" style="background:#6366F1">박</div>
+            <div class="schedule-info">
+              <div class="name">박지현</div>
+              <div class="subject">수학 - 이차방정식</div>
+            </div>
+          </div>
+          <span class="badge badge-info">예정</span>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">16:00</div>
+          <div class="avatar-row">
+            <div class="avatar" style="background:#EC4899">이</div>
+            <div class="schedule-info">
+              <div class="name">이준호</div>
+              <div class="subject">과학 - 뉴턴의 운동법칙</div>
+            </div>
+          </div>
+          <span class="badge badge-info">예정</span>
+        </div>
+        <div class="schedule-item">
+          <div class="schedule-time">19:00</div>
+          <div class="avatar-row">
+            <div class="avatar" style="background:#F59E0B">최</div>
+            <div class="schedule-info">
+              <div class="name">최서연</div>
+              <div class="subject">수학 - 확률과 통계</div>
+            </div>
+          </div>
+          <span class="badge badge-info">예정</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3>최근 리포트</h3>
+          <button class="btn btn-sm btn-secondary" onclick="navigate('reports')">전체보기</button>
+        </div>
+        <table>
+          <thead><tr><th>학생</th><th>날짜</th><th>상태</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="avatar-row"><div class="avatar" style="background:#6366F1;width:28px;height:28px;font-size:11px">박</div>박지현</div></td>
+              <td>4/11</td>
+              <td><span class="badge badge-success">발송완료</span></td>
+            </tr>
+            <tr>
+              <td><div class="avatar-row"><div class="avatar" style="background:#EC4899;width:28px;height:28px;font-size:11px">이</div>이준호</div></td>
+              <td>4/11</td>
+              <td><span class="badge badge-warning">검토중</span></td>
+            </tr>
+            <tr>
+              <td><div class="avatar-row"><div class="avatar" style="background:#10B981;width:28px;height:28px;font-size:11px">김</div>김민서</div></td>
+              <td>4/10</td>
+              <td><span class="badge badge-danger">미발송</span></td>
+            </tr>
+            <tr>
+              <td><div class="avatar-row"><div class="avatar" style="background:#F59E0B;width:28px;height:28px;font-size:11px">최</div>최서연</div></td>
+              <td>4/10</td>
+              <td><span class="badge badge-success">발송완료</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3>숙제 현황</h3>
+      </div>
+      <table>
+        <thead><tr><th>학생</th><th>과목</th><th>숙제 내용</th><th>진행률</th><th>상태</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="avatar-row"><div class="avatar" style="background:#6366F1;width:28px;height:28px;font-size:11px">박</div>박지현</div></td>
+            <td>수학</td>
+            <td>교재 p.52~55 풀이</td>
+            <td><div style="display:flex;align-items:center;gap:10px;"><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:75%;background:var(--primary)"></div></div><span style="font-size:13px;color:var(--gray-500)">75%</span></div></td>
+            <td><span class="badge badge-warning">진행중</span></td>
+          </tr>
+          <tr>
+            <td><div class="avatar-row"><div class="avatar" style="background:#EC4899;width:28px;height:28px;font-size:11px">이</div>이준호</div></td>
+            <td>과학</td>
+            <td>실험 보고서 작성</td>
+            <td><div style="display:flex;align-items:center;gap:10px;"><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div><span style="font-size:13px;color:var(--gray-500)">100%</span></div></td>
+            <td><span class="badge badge-success">완료</span></td>
+          </tr>
+          <tr>
+            <td><div class="avatar-row"><div class="avatar" style="background:#10B981;width:28px;height:28px;font-size:11px">김</div>김민서</div></td>
+            <td>수학</td>
+            <td>유인물 #7 문제풀이</td>
+            <td><div style="display:flex;align-items:center;gap:10px;"><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:0%;background:var(--danger)"></div></div><span style="font-size:13px;color:var(--gray-500)">0%</span></div></td>
+            <td><span class="badge badge-danger">미시작</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== Students ==================== -->
+  <div class="page" id="page-students">
+    <div class="page-header">
+      <div>
+        <h1>학생 관리</h1>
+        <div class="subtitle">담당 학생 목록 및 진도 관리</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('add-student-modal')">+ 학생 추가</button>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>학생</th><th>학년</th><th>과목</th><th>진도</th><th>다음 수업</th><th>숙제</th><th></th></tr>
+        </thead>
+        <tbody>
+          <tr onclick="navigate('student-detail')" style="cursor:pointer">
+            <td><div class="avatar-row"><div class="avatar" style="background:#6366F1">박</div><div><div style="font-weight:500">박지현</div><div style="font-size:12px;color:var(--gray-500)">학부모: 박영수</div></div></div></td>
+            <td>중3</td>
+            <td>수학</td>
+            <td><div style="font-size:13px">개념원리 중3-2<br><span style="color:var(--gray-500)">Ch.3 이차방정식 (p.48/120)</span></div></td>
+            <td>오늘 14:00</td>
+            <td><span class="badge badge-warning">진행중 75%</span></td>
+            <td><button class="btn btn-sm btn-secondary">상세</button></td>
+          </tr>
+          <tr style="cursor:pointer">
+            <td><div class="avatar-row"><div class="avatar" style="background:#EC4899">이</div><div><div style="font-weight:500">이준호</div><div style="font-size:12px;color:var(--gray-500)">학부모: 이미경</div></div></div></td>
+            <td>고1</td>
+            <td>과학</td>
+            <td><div style="font-size:13px">물리학I<br><span style="color:var(--gray-500)">Ch.2 뉴턴의 운동법칙 (p.35/90)</span></div></td>
+            <td>오늘 16:00</td>
+            <td><span class="badge badge-success">완료</span></td>
+            <td><button class="btn btn-sm btn-secondary">상세</button></td>
+          </tr>
+          <tr style="cursor:pointer">
+            <td><div class="avatar-row"><div class="avatar" style="background:#10B981">김</div><div><div style="font-weight:500">김민서</div><div style="font-size:12px;color:var(--gray-500)">학부모: 김정호</div></div></div></td>
+            <td>중2</td>
+            <td>수학</td>
+            <td><div style="font-size:13px">쎈 중2-1<br><span style="color:var(--gray-500)">Ch.5 일차함수 (p.82/150)</span></div></td>
+            <td>4/14 (월) 17:00</td>
+            <td><span class="badge badge-danger">미시작</span></td>
+            <td><button class="btn btn-sm btn-secondary">상세</button></td>
+          </tr>
+          <tr style="cursor:pointer">
+            <td><div class="avatar-row"><div class="avatar" style="background:#F59E0B">최</div><div><div style="font-weight:500">최서연</div><div style="font-size:12px;color:var(--gray-500)">학부모: 최은영</div></div></div></td>
+            <td>고2</td>
+            <td>수학</td>
+            <td><div style="font-size:13px">수학의 정석 확통<br><span style="color:var(--gray-500)">Ch.1 경우의 수 (p.22/80)</span></div></td>
+            <td>오늘 19:00</td>
+            <td><span class="badge badge-success">완료</span></td>
+            <td><button class="btn btn-sm btn-secondary">상세</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== Student Detail ==================== -->
+  <div class="page" id="page-student-detail">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <button class="btn btn-secondary btn-sm" onclick="navigate('students')">← 뒤로</button>
+        <div>
+          <h1>박지현</h1>
+          <div class="subtitle">중3 · 수학 · 학부모: 박영수</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab(this, 'detail-progress')">진도 관리</button>
+      <button class="tab" onclick="switchTab(this, 'detail-homework')">숙제</button>
+      <button class="tab" onclick="switchTab(this, 'detail-reports')">리포트 이력</button>
+      <button class="tab" onclick="switchTab(this, 'detail-materials')">자료</button>
+    </div>
+
+    <div id="detail-progress" class="tab-content">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><h3>현재 교재 진도</h3></div>
+          <div style="margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-weight:500;">개념원리 중3-2</span>
+              <span style="color:var(--gray-500);font-size:13px;">48 / 120 페이지</span>
+            </div>
+            <div class="progress-bar" style="height:10px;">
+              <div class="progress-fill" style="width:40%;background:var(--primary);"></div>
+            </div>
+          </div>
+          <div style="font-size:14px;color:var(--gray-600);line-height:1.8;">
+            <div><strong>현재:</strong> Ch.3 이차방정식 - 근의 공식</div>
+            <div><strong>최근 수업:</strong> 이차방정식 풀이 (판별식)</div>
+            <div><strong>다음 수업:</strong> 이차방정식의 활용</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>수업 메모</h3></div>
+          <div style="font-size:14px;color:var(--gray-600);line-height:1.8;">
+            <div style="padding:10px 0;border-bottom:1px solid var(--gray-100);">
+              <div style="font-weight:500;">4/11 수업</div>
+              <div>근의 공식 대입은 정확하나, 판별식 D=b²-4ac 에서 부호 실수가 잦음. 반복 연습 필요.</div>
+            </div>
+            <div style="padding:10px 0;border-bottom:1px solid var(--gray-100);">
+              <div style="font-weight:500;">4/8 수업</div>
+              <div>인수분해로 이차방정식 풀기 완료. 완전제곱식은 잘 하는 편.</div>
+            </div>
+            <div style="padding:10px 0;">
+              <div style="font-weight:500;">4/4 수업</div>
+              <div>이차방정식 개념 도입. 흥미를 보이며 이해 빠름.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="detail-homework" class="tab-content" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <h3>현재 숙제</h3>
+          <button class="btn btn-sm btn-primary">+ 숙제 추가</button>
+        </div>
+        <div class="hw-item">
+          <input type="checkbox" checked>
+          <label style="flex:1;text-decoration:line-through;color:var(--gray-400);">교재 p.48 예제 1~5번</label>
+          <span class="badge badge-success">완료</span>
+        </div>
+        <div class="hw-item">
+          <input type="checkbox" checked>
+          <label style="flex:1;text-decoration:line-through;color:var(--gray-400);">교재 p.50 연습문제 1~8번</label>
+          <span class="badge badge-success">완료</span>
+        </div>
+        <div class="hw-item">
+          <input type="checkbox">
+          <label style="flex:1;">교재 p.52 심화문제 1~5번</label>
+          <span class="badge badge-warning">진행중</span>
+        </div>
+        <div class="hw-item">
+          <input type="checkbox">
+          <label style="flex:1;">유인물 #6 오답노트 정리</label>
+          <span class="badge badge-danger">미시작</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="detail-reports" class="tab-content" style="display:none;">
+      <div class="card">
+        <div class="card-header"><h3>학부모 리포트 이력</h3></div>
+        <table>
+          <thead><tr><th>날짜</th><th>수업 내용</th><th>상태</th><th></th></tr></thead>
+          <tbody>
+            <tr>
+              <td>4/11</td>
+              <td>이차방정식 - 근의 공식, 판별식</td>
+              <td><span class="badge badge-success">발송완료</span></td>
+              <td><button class="btn btn-sm btn-secondary">보기</button></td>
+            </tr>
+            <tr>
+              <td>4/8</td>
+              <td>이차방정식 - 인수분해 풀이</td>
+              <td><span class="badge badge-success">발송완료</span></td>
+              <td><button class="btn btn-sm btn-secondary">보기</button></td>
+            </tr>
+            <tr>
+              <td>4/4</td>
+              <td>이차방정식 개념 도입</td>
+              <td><span class="badge badge-success">발송완료</span></td>
+              <td><button class="btn btn-sm btn-secondary">보기</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="detail-materials" class="tab-content" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <h3>Google Drive 자료</h3>
+          <button class="btn btn-sm btn-primary">+ 링크 추가</button>
+        </div>
+        <div class="drive-item">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div><div style="font-weight:500;font-size:14px;">유인물 #6 - 이차방정식 연습</div><div style="font-size:12px;color:var(--gray-500);">PDF · 4/11 업로드</div></div>
+          </div>
+          <a href="#" class="btn btn-sm btn-secondary">열기</a>
+        </div>
+        <div class="drive-item">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div><div style="font-weight:500;font-size:14px;">유인물 #5 - 인수분해 심화</div><div style="font-size:12px;color:var(--gray-500);">PDF · 4/7 업로드</div></div>
+          </div>
+          <a href="#" class="btn btn-sm btn-secondary">열기</a>
+        </div>
+        <div class="drive-item">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div><div style="font-weight:500;font-size:14px;">개념원리 중3-2 추가문제</div><div style="font-size:12px;color:var(--gray-500);">PDF · 3/28 업로드</div></div>
+          </div>
+          <a href="#" class="btn btn-sm btn-secondary">열기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Upload ==================== -->
+  <div class="page" id="page-upload">
+    <div class="page-header">
+      <div>
+        <h1>수업 녹화 업로드</h1>
+        <div class="subtitle">수업 녹화 파일을 업로드하면 AI가 자동으로 리포트를 생성합니다</div>
+      </div>
+    </div>
+
+    <div class="card" id="upload-step1">
+      <div class="grid-2">
+        <div class="form-group">
+          <label>학생 선택</label>
+          <select class="form-input" id="upload-student">
+            <option value="">선택하세요</option>
+            <option value="park">박지현 (중3 · 수학)</option>
+            <option value="lee">이준호 (고1 · 과학)</option>
+            <option value="kim">김민서 (중2 · 수학)</option>
+            <option value="choi">최서연 (고2 · 수학)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>수업 날짜</label>
+          <input type="date" class="form-input" value="2026-04-13">
+        </div>
+      </div>
+
+      <div class="upload-area" onclick="startProcessing()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p class="upload-main">클릭하여 녹화 파일 업로드</p>
+        <p>MP4, WebM, MKV (최대 2시간)</p>
+      </div>
+    </div>
+
+    <!-- Processing state -->
+    <div class="card" id="upload-processing" style="display:none;">
+      <h3 style="margin-bottom:8px;">수업 분석 중...</h3>
+      <p style="color:var(--gray-500);font-size:14px;margin-bottom:20px;">박지현 · 2026.04.13 수업</p>
+
+      <div class="process-steps">
+        <div class="process-step done" id="step1">
+          <div class="step-icon">&#10003;</div>
+          <div>
+            <div class="step-text">음성 추출</div>
+            <div class="step-sub">mp4에서 오디오 트랙 분리 완료</div>
+          </div>
+        </div>
+        <div class="process-step done" id="step2">
+          <div class="step-icon">&#10003;</div>
+          <div>
+            <div class="step-text">30초 청크 분할</div>
+            <div class="step-sub">237개 청크 생성 완료</div>
+          </div>
+        </div>
+        <div class="process-step active" id="step3">
+          <div class="step-icon"><div class="spinner" style="width:20px;height:20px;border-width:2px;"></div></div>
+          <div>
+            <div class="step-text">음성 인식 (Gemma 4 E4B)</div>
+            <div class="step-sub">청크 처리중... 184/237 (78%)</div>
+          </div>
+        </div>
+        <div class="process-step" id="step4">
+          <div class="step-icon">4</div>
+          <div>
+            <div class="step-text">수업 내용 요약 (Gemma 4 27B)</div>
+            <div class="step-sub">대기중</div>
+          </div>
+        </div>
+        <div class="process-step" id="step5">
+          <div class="step-icon">5</div>
+          <div>
+            <div class="step-text">학부모 리포트 생성</div>
+            <div class="step-sub">대기중</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-bar" style="height:12px;">
+        <div class="progress-fill" style="width:65%;background:var(--primary);"></div>
+      </div>
+      <div style="text-align:center;margin-top:8px;font-size:13px;color:var(--gray-500);">예상 소요시간: 약 3분</div>
+    </div>
+
+    <!-- Done state -->
+    <div class="card" id="upload-done" style="display:none;">
+      <div style="text-align:center;padding:16px 0;">
+        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--success)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 10 11 16 8 13"/></svg>
+        <h3 style="margin-top:12px;">리포트 생성 완료!</h3>
+        <p style="color:var(--gray-500);font-size:14px;margin-top:4px;">박지현 · 2026.04.13 수업</p>
+      </div>
+
+      <div class="report-preview" style="margin-top:20px;">
+[수업 리포트] 박지현 · 4월 13일
+
+■ 오늘 수업 내용
+- 이차방정식의 활용 (교재 p.52~55)
+- 실생활 문제를 이차방정식으로 세우는 연습
+- 넓이, 연속하는 수, 시간/거리 문제 유형 학습
+
+■ 학습 태도 및 이해도
+- 방정식 세우기까지는 잘 하지만, 문제에서 조건을 놓치는 경우가 있음
+- 특히 "양수 조건" 확인을 빠뜨리는 실수 반복
+- 풀이 속도는 빨라지고 있으며, 근의 공식 적용은 안정적
+
+■ 숙제
+- 교재 p.56~58 연습문제 (1~12번)
+- 유인물 #7 (이차방정식 활용 심화)
+
+■ 다음 수업 예고
+- 이차함수 y=ax² 그래프 도입
+- 이차방정식과 이차함수의 관계
+
+■ 선생님 코멘트
+지현이가 문장제 문제 해석력이 많이 좋아졌습니다.
+다만 답을 구한 후 문제 조건에 맞는지 검증하는 습관을 들이면 더 좋겠습니다.
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:20px;justify-content:center;">
+        <button class="btn btn-secondary" onclick="navigate('reports')">수정하기</button>
+        <button class="btn btn-primary">리포트 복사 (학원 시스템 붙여넣기용)</button>
+        <button class="btn btn-success">진도 & 숙제 자동 업데이트</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Reports ==================== -->
+  <div class="page" id="page-reports">
+    <div class="page-header">
+      <div>
+        <h1>학부모 리포트</h1>
+        <div class="subtitle">AI가 생성한 리포트를 검토하고 발송하세요</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active">전체</button>
+      <button class="tab">미발송 (3)</button>
+      <button class="tab">검토중 (1)</button>
+      <button class="tab">발송완료</button>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead><tr><th>학생</th><th>수업일</th><th>주요 내용</th><th>상태</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="avatar-row"><div class="avatar" style="background:#6366F1;width:28px;height:28px;font-size:11px">박</div>박지현</div></td>
+            <td>4/13</td>
+            <td>이차방정식의 활용</td>
+            <td><span class="badge badge-warning">검토중</span></td>
+            <td><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-secondary">수정</button><button class="btn btn-sm btn-primary">발송</button></div></td>
+          </tr>
+          <tr>
+            <td><div class="avatar-row"><div class="avatar" style="background:#EC4899;width:28px;height:28px;font-size:11px">이</div>이준호</div></td>
+            <td>4/11</td>
+            <td>뉴턴의 제2법칙, F=ma</td>
+            <td><span class="badge badge-danger">미발송</span></td>
+            <td><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-secondary">수정</button><button class="btn btn-sm btn-primary">발송</button></div></td>
+          </tr>
+          <tr>
+            <td><div class="avatar-row"><div class="avatar" style="background:#10B981;width:28px;height:28px;font-size:11px">김</div>김민서</div></td>
+            <td>4/10</td>
+            <td>일차함수 그래프</td>
+            <td><span class="badge badge-danger">미발송</span></td>
+            <td><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-secondary">수정</button><button class="btn btn-sm btn-primary">발송</button></div></td>
+          </tr>
+          <tr>
+            <td><div class="avatar-row"><div class="avatar" style="background:#6366F1;width:28px;height:28px;font-size:11px">박</div>박지현</div></td>
+            <td>4/11</td>
+            <td>이차방정식 - 근의 공식</td>
+            <td><span class="badge badge-success">발송완료</span></td>
+            <td><button class="btn btn-sm btn-secondary">보기</button></td>
+          </tr>
+          <tr>
+            <td><div class="avatar-row"><div class="avatar" style="background:#F59E0B;width:28px;height:28px;font-size:11px">최</div>최서연</div></td>
+            <td>4/10</td>
+            <td>경우의 수 - 순열</td>
+            <td><span class="badge badge-success">발송완료</span></td>
+            <td><button class="btn btn-sm btn-secondary">보기</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== Materials ==================== -->
+  <div class="page" id="page-materials">
+    <div class="page-header">
+      <div>
+        <h1>교재/자료 관리</h1>
+        <div class="subtitle">학생별 교재 진도와 Google Drive 자료를 관리하세요</div>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('add-material-modal')">+ 자료 추가</button>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><h3>교재별 진도 현황</h3></div>
+        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--gray-100);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div>
+              <div style="font-weight:500;">개념원리 중3-2</div>
+              <div style="font-size:12px;color:var(--gray-500);">박지현</div>
+            </div>
+            <span style="font-size:13px;color:var(--gray-500);">40%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:40%;background:var(--primary)"></div></div>
+        </div>
+        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--gray-100);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div>
+              <div style="font-weight:500;">물리학I</div>
+              <div style="font-size:12px;color:var(--gray-500);">이준호</div>
+            </div>
+            <span style="font-size:13px;color:var(--gray-500);">39%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:39%;background:#EC4899"></div></div>
+        </div>
+        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--gray-100);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div>
+              <div style="font-weight:500;">쎈 중2-1</div>
+              <div style="font-size:12px;color:var(--gray-500);">김민서</div>
+            </div>
+            <span style="font-size:13px;color:var(--gray-500);">55%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:55%;background:var(--success)"></div></div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div>
+              <div style="font-weight:500;">수학의 정석 확통</div>
+              <div style="font-size:12px;color:var(--gray-500);">최서연</div>
+            </div>
+            <span style="font-size:13px;color:var(--gray-500);">28%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:28%;background:var(--warning)"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>최근 업로드 자료</h3></div>
+        <div class="drive-item">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div>
+              <div style="font-weight:500;font-size:14px;">유인물 #7 - 이차방정식 활용</div>
+              <div style="font-size:12px;color:var(--gray-500);">박지현 · 4/13</div>
+            </div>
+          </div>
+          <a href="#" class="btn btn-sm btn-secondary">열기</a>
+        </div>
+        <div class="drive-item">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div>
+              <div style="font-weight:500;font-size:14px;">뉴턴 법칙 정리노트</div>
+              <div style="font-size:12px;color:var(--gray-500);">이준호 · 4/11</div>
+            </div>
+          </div>
+          <a href="#" class="btn btn-sm btn-secondary">열기</a>
+        </div>
+        <div class="drive-item">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div>
+              <div style="font-weight:500;font-size:14px;">일차함수 개념맵</div>
+              <div style="font-size:12px;color:var(--gray-500);">김민서 · 4/9</div>
+            </div>
+          </div>
+          <a href="#" class="btn btn-sm btn-secondary">열기</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Schedule ==================== -->
+  <div class="page" id="page-schedule">
+    <div class="page-header">
+      <div>
+        <h1>수업 일정</h1>
+        <div class="subtitle">이번 주 수업 일정</div>
+      </div>
+      <button class="btn btn-primary">+ 수업 추가</button>
+    </div>
+
+    <div class="card">
+      <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr 1fr 1fr 1fr 1fr;gap:1px;background:var(--gray-200);border-radius:8px;overflow:hidden;">
+        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;"></div>
+        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">월 (4/13)</div>
+        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">화 (4/14)</div>
+        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">수 (4/15)</div>
+        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">목 (4/16)</div>
+        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">금 (4/17)</div>
+        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">토 (4/18)</div>
+        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">일 (4/19)</div>
+
+        <!-- 14:00 row -->
+        <div style="background:white;padding:12px;font-size:13px;color:var(--gray-500);text-align:center;">14:00</div>
+        <div style="background:white;padding:8px;">
+          <div style="background:var(--primary-bg);border-left:3px solid var(--primary);padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">박지현</div>
+            <div style="color:var(--gray-500);">수학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;">
+          <div style="background:var(--primary-bg);border-left:3px solid var(--primary);padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">박지현</div>
+            <div style="color:var(--gray-500);">수학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;">
+          <div style="background:var(--primary-bg);border-left:3px solid var(--primary);padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">박지현</div>
+            <div style="color:var(--gray-500);">수학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;"></div>
+
+        <!-- 16:00 row -->
+        <div style="background:white;padding:12px;font-size:13px;color:var(--gray-500);text-align:center;">16:00</div>
+        <div style="background:white;padding:8px;">
+          <div style="background:#FCE7F3;border-left:3px solid #EC4899;padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">이준호</div>
+            <div style="color:var(--gray-500);">과학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;">
+          <div style="background:#FCE7F3;border-left:3px solid #EC4899;padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">이준호</div>
+            <div style="color:var(--gray-500);">과학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;"></div>
+
+        <!-- 17:00 row -->
+        <div style="background:white;padding:12px;font-size:13px;color:var(--gray-500);text-align:center;">17:00</div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;">
+          <div style="background:#D1FAE5;border-left:3px solid #10B981;padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">김민서</div>
+            <div style="color:var(--gray-500);">수학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;">
+          <div style="background:#D1FAE5;border-left:3px solid #10B981;padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">김민서</div>
+            <div style="color:var(--gray-500);">수학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;"></div>
+
+        <!-- 19:00 row -->
+        <div style="background:white;padding:12px;font-size:13px;color:var(--gray-500);text-align:center;">19:00</div>
+        <div style="background:white;padding:8px;">
+          <div style="background:var(--warning-bg);border-left:3px solid var(--warning);padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">최서연</div>
+            <div style="color:var(--gray-500);">수학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;">
+          <div style="background:var(--warning-bg);border-left:3px solid var(--warning);padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">최서연</div>
+            <div style="color:var(--gray-500);">수학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+        <div style="background:white;padding:8px;">
+          <div style="background:var(--warning-bg);border-left:3px solid var(--warning);padding:8px;border-radius:4px;font-size:12px;">
+            <div style="font-weight:600;">최서연</div>
+            <div style="color:var(--gray-500);">수학</div>
+          </div>
+        </div>
+        <div style="background:white;padding:8px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Student Modal -->
+<div class="modal-overlay" id="add-student-modal">
+  <div class="modal">
+    <h2>학생 추가</h2>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>학생 이름</label>
+        <input type="text" class="form-input" placeholder="홍길동">
+      </div>
+      <div class="form-group">
+        <label>학년</label>
+        <select class="form-input">
+          <option>중1</option><option>중2</option><option>중3</option>
+          <option>고1</option><option>고2</option><option>고3</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>과목</label>
+        <input type="text" class="form-input" placeholder="수학">
+      </div>
+      <div class="form-group">
+        <label>학부모 이름</label>
+        <input type="text" class="form-input" placeholder="홍부모">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>사용 교재</label>
+      <input type="text" class="form-input" placeholder="개념원리 중3-2">
+    </div>
+    <div class="form-group">
+      <label>수업 요일/시간</label>
+      <input type="text" class="form-input" placeholder="월/수/금 14:00">
+    </div>
+    <div class="form-group">
+      <label>메모</label>
+      <textarea class="form-input" placeholder="학생 특이사항, 학습 목표 등"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('add-student-modal')">취소</button>
+      <button class="btn btn-primary" onclick="closeModal('add-student-modal')">추가</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Material Modal -->
+<div class="modal-overlay" id="add-material-modal">
+  <div class="modal">
+    <h2>자료 추가</h2>
+    <div class="form-group">
+      <label>학생</label>
+      <select class="form-input">
+        <option>박지현</option><option>이준호</option><option>김민서</option><option>최서연</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>자료 이름</label>
+      <input type="text" class="form-input" placeholder="유인물 #8 - 이차함수">
+    </div>
+    <div class="form-group">
+      <label>Google Drive 링크</label>
+      <input type="text" class="form-input" placeholder="https://drive.google.com/file/d/...">
+    </div>
+    <div class="form-group">
+      <label>유형</label>
+      <select class="form-input">
+        <option>유인물</option><option>교재 부교재</option><option>시험지</option><option>기타</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal('add-material-modal')">취소</button>
+      <button class="btn btn-primary" onclick="closeModal('add-material-modal')">추가</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Navigation
+  function navigate(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    const navLink = document.querySelector(`[data-page="${page}"]`);
+    if (navLink) navLink.classList.add('active');
+  }
+
+  document.querySelectorAll('.sidebar nav a').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      navigate(link.dataset.page);
+    });
+  });
+
+  // Modal
+  function openModal(id) {
+    document.getElementById(id).classList.add('active');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+  }
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) overlay.classList.remove('active');
+    });
+  });
+
+  // Tab switching
+  function switchTab(btn, contentId) {
+    btn.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    document.getElementById(contentId).style.display = 'block';
+  }
+
+  // Upload processing simulation
+  function startProcessing() {
+    const student = document.getElementById('upload-student').value;
+    if (!student) { alert('학생을 먼저 선택해주세요.'); return; }
+
+    document.getElementById('upload-step1').style.display = 'none';
+    document.getElementById('upload-processing').style.display = 'block';
+
+    setTimeout(() => {
+      const step3 = document.getElementById('step3');
+      step3.classList.remove('active');
+      step3.classList.add('done');
+      step3.querySelector('.step-icon').innerHTML = '&#10003;';
+      step3.querySelector('.step-sub').textContent = '237개 청크 처리 완료';
+
+      const step4 = document.getElementById('step4');
+      step4.classList.add('active');
+      step4.querySelector('.step-icon').innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;"></div>';
+      step4.querySelector('.step-sub').textContent = '수업 내용 분석중...';
+      document.querySelector('#upload-processing .progress-fill').style.width = '85%';
+    }, 2000);
+
+    setTimeout(() => {
+      const step4 = document.getElementById('step4');
+      step4.classList.remove('active');
+      step4.classList.add('done');
+      step4.querySelector('.step-icon').innerHTML = '&#10003;';
+      step4.querySelector('.step-sub').textContent = '요약 완료';
+
+      const step5 = document.getElementById('step5');
+      step5.classList.add('active');
+      step5.querySelector('.step-icon').innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;"></div>';
+      step5.querySelector('.step-sub').textContent = '리포트 작성중...';
+      document.querySelector('#upload-processing .progress-fill').style.width = '95%';
+    }, 3500);
+
+    setTimeout(() => {
+      document.getElementById('upload-processing').style.display = 'none';
+      document.getElementById('upload-done').style.display = 'block';
+    }, 5000);
+  }
+</script>
+</body>
+</html>
