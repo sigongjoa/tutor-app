@@ -5,1309 +5,714 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TutorFlow - 과외 관리 시스템</title>
 <style>
-  :root {
-    --primary: #4F46E5;
-    --primary-light: #818CF8;
-    --primary-bg: #EEF2FF;
-    --success: #10B981;
-    --success-bg: #D1FAE5;
-    --warning: #F59E0B;
-    --warning-bg: #FEF3C7;
-    --danger: #EF4444;
-    --danger-bg: #FEE2E2;
-    --gray-50: #F9FAFB;
-    --gray-100: #F3F4F6;
-    --gray-200: #E5E7EB;
-    --gray-300: #D1D5DB;
-    --gray-400: #9CA3AF;
-    --gray-500: #6B7280;
-    --gray-600: #4B5563;
-    --gray-700: #374151;
-    --gray-800: #1F2937;
-    --gray-900: #111827;
-    --radius: 12px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
-    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
-  }
+:root{--primary:#4F46E5;--primary-light:#818CF8;--primary-bg:#EEF2FF;--success:#10B981;--success-bg:#D1FAE5;--warning:#F59E0B;--warning-bg:#FEF3C7;--danger:#EF4444;--danger-bg:#FEE2E2;--g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g300:#D1D5DB;--g400:#9CA3AF;--g500:#6B7280;--g600:#4B5563;--g700:#374151;--g800:#1F2937;--g900:#111827;--r:12px;--sh:0 1px 3px rgba(0,0,0,.1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--g50);color:var(--g800);display:flex;min-height:100vh}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--gray-50);
-    color: var(--gray-800);
-    display: flex;
-    min-height: 100vh;
-  }
+/* Mockup Banner */
+.mockup-banner{position:fixed;top:0;left:0;right:0;z-index:999;background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff;text-align:center;padding:10px;font-size:14px;font-weight:600;letter-spacing:.5px}
+.mockup-banner span{background:rgba(0,0,0,.2);padding:2px 10px;border-radius:12px;font-size:12px;margin-left:8px}
 
-  /* Sidebar */
-  .sidebar {
-    width: 260px;
-    background: var(--gray-900);
-    color: white;
-    padding: 24px 16px;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 100;
-  }
-  .sidebar .logo {
-    font-size: 22px;
-    font-weight: 700;
-    padding: 0 12px 24px;
-    border-bottom: 1px solid var(--gray-700);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .sidebar .logo span { color: var(--primary-light); }
-  .sidebar nav { flex: 1; }
-  .sidebar nav a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    color: var(--gray-400);
-    text-decoration: none;
-    border-radius: 8px;
-    margin-bottom: 4px;
-    font-size: 15px;
-    transition: all 0.15s;
-  }
-  .sidebar nav a:hover { background: var(--gray-700); color: white; }
-  .sidebar nav a.active { background: var(--primary); color: white; }
-  .sidebar nav a svg { width: 20px; height: 20px; flex-shrink: 0; }
-  .sidebar .user-info {
-    border-top: 1px solid var(--gray-700);
-    padding-top: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .sidebar .user-avatar {
-    width: 36px; height: 36px;
-    background: var(--primary);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 600; font-size: 14px;
-  }
-  .sidebar .user-name { font-size: 14px; font-weight: 500; }
-  .sidebar .user-role { font-size: 12px; color: var(--gray-400); }
+/* Sidebar */
+.sidebar{width:250px;background:var(--g900);color:#fff;padding:60px 14px 20px;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.logo{font-size:20px;font-weight:700;padding:0 10px 20px;border-bottom:1px solid var(--g700);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.logo span{color:var(--primary-light)}
+nav{flex:1}
+nav a{display:flex;align-items:center;gap:10px;padding:11px 12px;color:var(--g400);text-decoration:none;border-radius:8px;margin-bottom:3px;font-size:14px;transition:.15s}
+nav a:hover{background:var(--g700);color:#fff}
+nav a.active{background:var(--primary);color:#fff}
+nav a svg{width:18px;height:18px;flex-shrink:0}
+.user-info{border-top:1px solid var(--g700);padding-top:14px;display:flex;align-items:center;gap:10px}
+.user-avatar{width:34px;height:34px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+.user-name{font-size:13px;font-weight:500}
+.user-role{font-size:11px;color:var(--g400)}
 
-  /* Main content */
-  .main { margin-left: 260px; flex: 1; padding: 32px; }
-  .page { display: none; }
-  .page.active { display: block; }
+/* Main */
+.main{margin-left:250px;flex:1;padding:70px 28px 28px}
+.page{display:none}.page.active{display:block}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.page-header h1{font-size:24px;font-weight:700}
+.subtitle{color:var(--g500);font-size:13px;margin-top:3px}
 
-  /* Header */
-  .page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 28px;
-  }
-  .page-header h1 { font-size: 26px; font-weight: 700; }
-  .page-header .subtitle { color: var(--gray-500); font-size: 14px; margin-top: 4px; }
+/* Cards */
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:20px;margin-bottom:16px}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.card-header h3{font-size:15px;font-weight:600}
 
-  /* Cards */
-  .card {
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 24px;
-    margin-bottom: 20px;
-  }
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  .card-header h3 { font-size: 16px; font-weight: 600; }
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:18px}
+.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:20px}
+.stat-value{font-size:26px;font-weight:700}
+.stat-label{font-size:12px;color:var(--g500);margin-top:3px}
 
-  /* Stat cards */
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
-  .stat-card {
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 20px;
-  }
-  .stat-card .stat-icon {
-    width: 44px; height: 44px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 12px;
-  }
-  .stat-card .stat-value { font-size: 28px; font-weight: 700; }
-  .stat-card .stat-label { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+/* Buttons */
+.btn{padding:9px 18px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:.15s}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#4338CA}
+.btn-secondary{background:var(--g100);color:var(--g700)}.btn-secondary:hover{background:var(--g200)}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-sm{padding:5px 12px;font-size:12px}
 
-  /* Buttons */
-  .btn {
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.15s;
-  }
-  .btn-primary { background: var(--primary); color: white; }
-  .btn-primary:hover { background: #4338CA; }
-  .btn-secondary { background: var(--gray-100); color: var(--gray-700); }
-  .btn-secondary:hover { background: var(--gray-200); }
-  .btn-success { background: var(--success); color: white; }
-  .btn-sm { padding: 6px 14px; font-size: 13px; }
+/* Tables */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--g500);padding:10px 14px;border-bottom:1px solid var(--g200)}
+td{padding:12px 14px;border-bottom:1px solid var(--g100);font-size:13px}
+tr:hover td{background:var(--g50)}
 
-  /* Tables */
-  table { width: 100%; border-collapse: collapse; }
-  th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500); padding: 12px 16px; border-bottom: 1px solid var(--gray-200); }
-  td { padding: 14px 16px; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
-  tr:hover td { background: var(--gray-50); }
+/* Badges */
+.badge{display:inline-flex;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-success{background:var(--success-bg);color:#065F46}
+.badge-warning{background:var(--warning-bg);color:#92400E}
+.badge-danger{background:var(--danger-bg);color:#991B1B}
+.badge-info{background:var(--primary-bg);color:#3730A3}
 
-  /* Badges */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-  }
-  .badge-success { background: var(--success-bg); color: #065F46; }
-  .badge-warning { background: var(--warning-bg); color: #92400E; }
-  .badge-danger { background: var(--danger-bg); color: #991B1B; }
-  .badge-info { background: var(--primary-bg); color: #3730A3; }
+/* Avatar */
+.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:12px;color:#fff;flex-shrink:0}
+.avatar-row{display:flex;align-items:center;gap:10px}
 
-  /* Avatar */
-  .avatar {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 600; font-size: 13px; color: white;
-    flex-shrink: 0;
-  }
-  .avatar-row { display: flex; align-items: center; gap: 12px; }
+/* Upload */
+.upload-area{border:2px dashed var(--g300);border-radius:var(--r);padding:40px;text-align:center;cursor:pointer;transition:.2s;background:var(--g50)}
+.upload-area:hover{border-color:var(--primary);background:var(--primary-bg)}
+.upload-area .icon{font-size:40px;margin-bottom:8px}
+.upload-main{font-size:15px;font-weight:500;color:var(--g700);margin-bottom:4px}
+.upload-sub{color:var(--g500);font-size:13px}
 
-  /* Upload area */
-  .upload-area {
-    border: 2px dashed var(--gray-300);
-    border-radius: var(--radius);
-    padding: 48px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.2s;
-    background: var(--gray-50);
-  }
-  .upload-area:hover { border-color: var(--primary); background: var(--primary-bg); }
-  .upload-area svg { width: 48px; height: 48px; color: var(--gray-400); margin-bottom: 12px; }
-  .upload-area p { color: var(--gray-500); font-size: 14px; }
-  .upload-area .upload-main { font-size: 16px; font-weight: 500; color: var(--gray-700); margin-bottom: 4px; }
+/* Progress */
+.progress-bar{background:var(--g200);border-radius:8px;height:8px;overflow:hidden}
+.progress-fill{height:100%;border-radius:8px;transition:width .6s}
 
-  /* Progress */
-  .progress-bar { background: var(--gray-200); border-radius: 8px; height: 8px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 8px; transition: width 0.6s ease; }
+/* Forms */
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:5px;color:var(--g700)}
+.form-input{width:100%;padding:9px 12px;border:1px solid var(--g300);border-radius:8px;font-size:13px}
+.form-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
+textarea.form-input{resize:vertical;min-height:100px}
+select.form-input{appearance:auto}
 
-  /* Forms */
-  .form-group { margin-bottom: 20px; }
-  .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--gray-700); }
-  .form-input {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid var(--gray-300);
-    border-radius: 8px;
-    font-size: 14px;
-    transition: border 0.15s;
-  }
-  .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
-  select.form-input { appearance: auto; }
-  textarea.form-input { resize: vertical; min-height: 120px; }
+/* Grid */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 
-  /* Grid layout */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:2px solid var(--g200)}
+.tab{padding:9px 18px;font-size:13px;font-weight:500;color:var(--g500);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.tab:hover{color:var(--g700)}.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
 
-  /* Today schedule */
-  .schedule-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--gray-100);
-  }
-  .schedule-item:last-child { border-bottom: none; }
-  .schedule-time {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--primary);
-    width: 70px;
-    flex-shrink: 0;
-  }
-  .schedule-info { flex: 1; }
-  .schedule-info .name { font-weight: 500; font-size: 14px; }
-  .schedule-info .subject { font-size: 13px; color: var(--gray-500); }
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;padding:28px;width:520px;max-height:80vh;overflow-y:auto;box-shadow:var(--sh)}
+.modal h2{font-size:18px;margin-bottom:20px}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
 
-  /* Modal */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal {
-    background: white;
-    border-radius: 16px;
-    padding: 32px;
-    width: 560px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: var(--shadow-lg);
-  }
-  .modal h2 { font-size: 20px; margin-bottom: 24px; }
-  .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+/* Report preview */
+.report-preview{background:var(--g50);border:1px solid var(--g200);border-radius:var(--r);padding:20px;font-size:13px;line-height:1.8;white-space:pre-wrap}
 
-  /* Report preview */
-  .report-preview {
-    background: var(--gray-50);
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 24px;
-    font-size: 14px;
-    line-height: 1.7;
-    white-space: pre-wrap;
-  }
+/* Process steps */
+.process-steps{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.process-step{display:flex;align-items:center;gap:12px;padding:14px;background:var(--g50);border-radius:10px}
+.process-step.active{background:var(--primary-bg)}
+.process-step.done{background:var(--success-bg)}
+.step-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--g200);font-size:13px;font-weight:600}
+.process-step.active .step-icon{background:var(--primary);color:#fff}
+.process-step.done .step-icon{background:var(--success);color:#fff}
+.step-text{font-size:13px;font-weight:500}
+.step-sub{font-size:11px;color:var(--g500)}
 
-  /* Processing steps */
-  .process-steps { display: flex; flex-direction: column; gap: 16px; margin: 24px 0; }
-  .process-step {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px;
-    background: var(--gray-50);
-    border-radius: 10px;
-  }
-  .process-step.active { background: var(--primary-bg); }
-  .process-step.done { background: var(--success-bg); }
-  .step-icon {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--gray-200);
-    font-size: 14px; font-weight: 600;
-  }
-  .process-step.active .step-icon { background: var(--primary); color: white; }
-  .process-step.done .step-icon { background: var(--success); color: white; }
-  .step-text { font-size: 14px; font-weight: 500; }
-  .step-sub { font-size: 12px; color: var(--gray-500); }
+/* Schedule grid */
+.sched-grid{display:grid;grid-template-columns:70px repeat(7,1fr);gap:1px;background:var(--g200);border-radius:8px;overflow:hidden}
+.sched-head{background:var(--g50);padding:10px;font-size:12px;font-weight:600;text-align:center}
+.sched-cell{background:#fff;padding:6px;min-height:60px}
+.sched-time{background:#fff;padding:10px;font-size:12px;color:var(--g500);text-align:center;display:flex;align-items:center;justify-content:center}
+.sched-block{padding:6px 8px;border-radius:4px;font-size:11px;border-left:3px solid}
 
-  /* Homework checklist */
-  .hw-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--gray-100);
-  }
-  .hw-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); }
-  .hw-item.checked label { text-decoration: line-through; color: var(--gray-400); }
+/* Drive items */
+.drive-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--g50);border-radius:8px;margin-bottom:6px}
+.drive-item:hover{background:var(--g100)}
 
-  /* Tab bar */
-  .tabs { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 2px solid var(--gray-200); }
-  .tab {
-    padding: 10px 20px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--gray-500);
-    border: none;
-    background: none;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -2px;
-    transition: all 0.15s;
-  }
-  .tab:hover { color: var(--gray-700); }
-  .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+/* Homework */
+.hw-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--g100)}
+.hw-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--primary)}
 
-  /* Drive links */
-  .drive-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    background: var(--gray-50);
-    border-radius: 8px;
-    margin-bottom: 8px;
-  }
-  .drive-item:hover { background: var(--gray-100); }
-  .drive-icon { color: var(--warning); margin-right: 10px; }
+/* Schedule item */
+.sched-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--g100)}
+.sched-item:last-child{border-bottom:none}
 
-  /* Spinner */
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner {
-    width: 20px; height: 20px;
-    border: 3px solid var(--gray-200);
-    border-top-color: var(--primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
+/* Spinner */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:18px;height:18px;border:2px solid var(--g200);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+
+/* Toast */
+.toast{position:fixed;bottom:30px;right:30px;background:var(--g900);color:#fff;padding:14px 24px;border-radius:10px;font-size:14px;z-index:300;transform:translateY(100px);opacity:0;transition:.3s}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media(max-width:768px){
+  .sidebar{width:60px;padding:60px 8px 12px}
+  .logo span,.sidebar nav a span,.user-info div:last-child{display:none}
+  .main{margin-left:60px;padding:60px 16px 16px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .sched-grid{font-size:10px}
+}
 </style>
 </head>
 <body>
 
+<!-- Mockup Banner -->
+<div class="mockup-banner">
+  This is a MOCKUP prototype — 실제 데이터가 아닌 목업 데이터로 동작합니다
+  <span>v0.1 Preview</span>
+</div>
+
 <!-- Sidebar -->
 <div class="sidebar">
-  <div class="logo">
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-    <span>TutorFlow</span>
-  </div>
-  <nav>
-    <a href="#" data-page="dashboard" class="active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      대시보드
-    </a>
-    <a href="#" data-page="students">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      학생 관리
-    </a>
-    <a href="#" data-page="upload">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      수업 녹화 업로드
-    </a>
-    <a href="#" data-page="reports">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-      학부모 리포트
-    </a>
-    <a href="#" data-page="materials">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-      교재/자료 관리
-    </a>
-    <a href="#" data-page="schedule">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      수업 일정
-    </a>
-  </nav>
+  <div class="logo">📖 <span>TutorFlow</span></div>
+  <nav id="nav"></nav>
   <div class="user-info">
     <div class="user-avatar">김</div>
-    <div>
-      <div class="user-name">김선생</div>
-      <div class="user-role">수학 / 과학</div>
-    </div>
+    <div><div class="user-name">김선생</div><div class="user-role">수학 / 과학</div></div>
   </div>
 </div>
 
-<!-- Main Content -->
-<div class="main">
+<div class="main" id="app"></div>
 
-  <!-- ==================== Dashboard ==================== -->
-  <div class="page active" id="page-dashboard">
-    <div class="page-header">
-      <div>
-        <h1>대시보드</h1>
-        <div class="subtitle">2026년 4월 13일 일요일</div>
-      </div>
-    </div>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-icon" style="background: var(--primary-bg);">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-        </div>
-        <div class="stat-value">12</div>
-        <div class="stat-label">담당 학생</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background: var(--success-bg);">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--success)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div class="stat-value">8</div>
-        <div class="stat-label">이번 주 완료 수업</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background: var(--warning-bg);">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        </div>
-        <div class="stat-value">3</div>
-        <div class="stat-label">미발송 리포트</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon" style="background: var(--danger-bg);">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="var(--danger)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        </div>
-        <div class="stat-value">2</div>
-        <div class="stat-label">숙제 미완료 학생</div>
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header">
-          <h3>오늘 수업 일정</h3>
-          <button class="btn btn-sm btn-secondary" onclick="navigate('schedule')">전체보기</button>
-        </div>
-        <div class="schedule-item">
-          <div class="schedule-time">14:00</div>
-          <div class="avatar-row">
-            <div class="avatar" style="background:#6366F1">박</div>
-            <div class="schedule-info">
-              <div class="name">박지현</div>
-              <div class="subject">수학 - 이차방정식</div>
-            </div>
-          </div>
-          <span class="badge badge-info">예정</span>
-        </div>
-        <div class="schedule-item">
-          <div class="schedule-time">16:00</div>
-          <div class="avatar-row">
-            <div class="avatar" style="background:#EC4899">이</div>
-            <div class="schedule-info">
-              <div class="name">이준호</div>
-              <div class="subject">과학 - 뉴턴의 운동법칙</div>
-            </div>
-          </div>
-          <span class="badge badge-info">예정</span>
-        </div>
-        <div class="schedule-item">
-          <div class="schedule-time">19:00</div>
-          <div class="avatar-row">
-            <div class="avatar" style="background:#F59E0B">최</div>
-            <div class="schedule-info">
-              <div class="name">최서연</div>
-              <div class="subject">수학 - 확률과 통계</div>
-            </div>
-          </div>
-          <span class="badge badge-info">예정</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <h3>최근 리포트</h3>
-          <button class="btn btn-sm btn-secondary" onclick="navigate('reports')">전체보기</button>
-        </div>
-        <table>
-          <thead><tr><th>학생</th><th>날짜</th><th>상태</th></tr></thead>
-          <tbody>
-            <tr>
-              <td><div class="avatar-row"><div class="avatar" style="background:#6366F1;width:28px;height:28px;font-size:11px">박</div>박지현</div></td>
-              <td>4/11</td>
-              <td><span class="badge badge-success">발송완료</span></td>
-            </tr>
-            <tr>
-              <td><div class="avatar-row"><div class="avatar" style="background:#EC4899;width:28px;height:28px;font-size:11px">이</div>이준호</div></td>
-              <td>4/11</td>
-              <td><span class="badge badge-warning">검토중</span></td>
-            </tr>
-            <tr>
-              <td><div class="avatar-row"><div class="avatar" style="background:#10B981;width:28px;height:28px;font-size:11px">김</div>김민서</div></td>
-              <td>4/10</td>
-              <td><span class="badge badge-danger">미발송</span></td>
-            </tr>
-            <tr>
-              <td><div class="avatar-row"><div class="avatar" style="background:#F59E0B;width:28px;height:28px;font-size:11px">최</div>최서연</div></td>
-              <td>4/10</td>
-              <td><span class="badge badge-success">발송완료</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <h3>숙제 현황</h3>
-      </div>
-      <table>
-        <thead><tr><th>학생</th><th>과목</th><th>숙제 내용</th><th>진행률</th><th>상태</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><div class="avatar-row"><div class="avatar" style="background:#6366F1;width:28px;height:28px;font-size:11px">박</div>박지현</div></td>
-            <td>수학</td>
-            <td>교재 p.52~55 풀이</td>
-            <td><div style="display:flex;align-items:center;gap:10px;"><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:75%;background:var(--primary)"></div></div><span style="font-size:13px;color:var(--gray-500)">75%</span></div></td>
-            <td><span class="badge badge-warning">진행중</span></td>
-          </tr>
-          <tr>
-            <td><div class="avatar-row"><div class="avatar" style="background:#EC4899;width:28px;height:28px;font-size:11px">이</div>이준호</div></td>
-            <td>과학</td>
-            <td>실험 보고서 작성</td>
-            <td><div style="display:flex;align-items:center;gap:10px;"><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:100%;background:var(--success)"></div></div><span style="font-size:13px;color:var(--gray-500)">100%</span></div></td>
-            <td><span class="badge badge-success">완료</span></td>
-          </tr>
-          <tr>
-            <td><div class="avatar-row"><div class="avatar" style="background:#10B981;width:28px;height:28px;font-size:11px">김</div>김민서</div></td>
-            <td>수학</td>
-            <td>유인물 #7 문제풀이</td>
-            <td><div style="display:flex;align-items:center;gap:10px;"><div class="progress-bar" style="width:120px"><div class="progress-fill" style="width:0%;background:var(--danger)"></div></div><span style="font-size:13px;color:var(--gray-500)">0%</span></div></td>
-            <td><span class="badge badge-danger">미시작</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ==================== Students ==================== -->
-  <div class="page" id="page-students">
-    <div class="page-header">
-      <div>
-        <h1>학생 관리</h1>
-        <div class="subtitle">담당 학생 목록 및 진도 관리</div>
-      </div>
-      <button class="btn btn-primary" onclick="openModal('add-student-modal')">+ 학생 추가</button>
-    </div>
-
-    <div class="card">
-      <table>
-        <thead>
-          <tr><th>학생</th><th>학년</th><th>과목</th><th>진도</th><th>다음 수업</th><th>숙제</th><th></th></tr>
-        </thead>
-        <tbody>
-          <tr onclick="navigate('student-detail')" style="cursor:pointer">
-            <td><div class="avatar-row"><div class="avatar" style="background:#6366F1">박</div><div><div style="font-weight:500">박지현</div><div style="font-size:12px;color:var(--gray-500)">학부모: 박영수</div></div></div></td>
-            <td>중3</td>
-            <td>수학</td>
-            <td><div style="font-size:13px">개념원리 중3-2<br><span style="color:var(--gray-500)">Ch.3 이차방정식 (p.48/120)</span></div></td>
-            <td>오늘 14:00</td>
-            <td><span class="badge badge-warning">진행중 75%</span></td>
-            <td><button class="btn btn-sm btn-secondary">상세</button></td>
-          </tr>
-          <tr style="cursor:pointer">
-            <td><div class="avatar-row"><div class="avatar" style="background:#EC4899">이</div><div><div style="font-weight:500">이준호</div><div style="font-size:12px;color:var(--gray-500)">학부모: 이미경</div></div></div></td>
-            <td>고1</td>
-            <td>과학</td>
-            <td><div style="font-size:13px">물리학I<br><span style="color:var(--gray-500)">Ch.2 뉴턴의 운동법칙 (p.35/90)</span></div></td>
-            <td>오늘 16:00</td>
-            <td><span class="badge badge-success">완료</span></td>
-            <td><button class="btn btn-sm btn-secondary">상세</button></td>
-          </tr>
-          <tr style="cursor:pointer">
-            <td><div class="avatar-row"><div class="avatar" style="background:#10B981">김</div><div><div style="font-weight:500">김민서</div><div style="font-size:12px;color:var(--gray-500)">학부모: 김정호</div></div></div></td>
-            <td>중2</td>
-            <td>수학</td>
-            <td><div style="font-size:13px">쎈 중2-1<br><span style="color:var(--gray-500)">Ch.5 일차함수 (p.82/150)</span></div></td>
-            <td>4/14 (월) 17:00</td>
-            <td><span class="badge badge-danger">미시작</span></td>
-            <td><button class="btn btn-sm btn-secondary">상세</button></td>
-          </tr>
-          <tr style="cursor:pointer">
-            <td><div class="avatar-row"><div class="avatar" style="background:#F59E0B">최</div><div><div style="font-weight:500">최서연</div><div style="font-size:12px;color:var(--gray-500)">학부모: 최은영</div></div></div></td>
-            <td>고2</td>
-            <td>수학</td>
-            <td><div style="font-size:13px">수학의 정석 확통<br><span style="color:var(--gray-500)">Ch.1 경우의 수 (p.22/80)</span></div></td>
-            <td>오늘 19:00</td>
-            <td><span class="badge badge-success">완료</span></td>
-            <td><button class="btn btn-sm btn-secondary">상세</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ==================== Student Detail ==================== -->
-  <div class="page" id="page-student-detail">
-    <div class="page-header">
-      <div style="display:flex;align-items:center;gap:16px;">
-        <button class="btn btn-secondary btn-sm" onclick="navigate('students')">← 뒤로</button>
-        <div>
-          <h1>박지현</h1>
-          <div class="subtitle">중3 · 수학 · 학부모: 박영수</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab(this, 'detail-progress')">진도 관리</button>
-      <button class="tab" onclick="switchTab(this, 'detail-homework')">숙제</button>
-      <button class="tab" onclick="switchTab(this, 'detail-reports')">리포트 이력</button>
-      <button class="tab" onclick="switchTab(this, 'detail-materials')">자료</button>
-    </div>
-
-    <div id="detail-progress" class="tab-content">
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header"><h3>현재 교재 진도</h3></div>
-          <div style="margin-bottom:16px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-              <span style="font-weight:500;">개념원리 중3-2</span>
-              <span style="color:var(--gray-500);font-size:13px;">48 / 120 페이지</span>
-            </div>
-            <div class="progress-bar" style="height:10px;">
-              <div class="progress-fill" style="width:40%;background:var(--primary);"></div>
-            </div>
-          </div>
-          <div style="font-size:14px;color:var(--gray-600);line-height:1.8;">
-            <div><strong>현재:</strong> Ch.3 이차방정식 - 근의 공식</div>
-            <div><strong>최근 수업:</strong> 이차방정식 풀이 (판별식)</div>
-            <div><strong>다음 수업:</strong> 이차방정식의 활용</div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header"><h3>수업 메모</h3></div>
-          <div style="font-size:14px;color:var(--gray-600);line-height:1.8;">
-            <div style="padding:10px 0;border-bottom:1px solid var(--gray-100);">
-              <div style="font-weight:500;">4/11 수업</div>
-              <div>근의 공식 대입은 정확하나, 판별식 D=b²-4ac 에서 부호 실수가 잦음. 반복 연습 필요.</div>
-            </div>
-            <div style="padding:10px 0;border-bottom:1px solid var(--gray-100);">
-              <div style="font-weight:500;">4/8 수업</div>
-              <div>인수분해로 이차방정식 풀기 완료. 완전제곱식은 잘 하는 편.</div>
-            </div>
-            <div style="padding:10px 0;">
-              <div style="font-weight:500;">4/4 수업</div>
-              <div>이차방정식 개념 도입. 흥미를 보이며 이해 빠름.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="detail-homework" class="tab-content" style="display:none;">
-      <div class="card">
-        <div class="card-header">
-          <h3>현재 숙제</h3>
-          <button class="btn btn-sm btn-primary">+ 숙제 추가</button>
-        </div>
-        <div class="hw-item">
-          <input type="checkbox" checked>
-          <label style="flex:1;text-decoration:line-through;color:var(--gray-400);">교재 p.48 예제 1~5번</label>
-          <span class="badge badge-success">완료</span>
-        </div>
-        <div class="hw-item">
-          <input type="checkbox" checked>
-          <label style="flex:1;text-decoration:line-through;color:var(--gray-400);">교재 p.50 연습문제 1~8번</label>
-          <span class="badge badge-success">완료</span>
-        </div>
-        <div class="hw-item">
-          <input type="checkbox">
-          <label style="flex:1;">교재 p.52 심화문제 1~5번</label>
-          <span class="badge badge-warning">진행중</span>
-        </div>
-        <div class="hw-item">
-          <input type="checkbox">
-          <label style="flex:1;">유인물 #6 오답노트 정리</label>
-          <span class="badge badge-danger">미시작</span>
-        </div>
-      </div>
-    </div>
-
-    <div id="detail-reports" class="tab-content" style="display:none;">
-      <div class="card">
-        <div class="card-header"><h3>학부모 리포트 이력</h3></div>
-        <table>
-          <thead><tr><th>날짜</th><th>수업 내용</th><th>상태</th><th></th></tr></thead>
-          <tbody>
-            <tr>
-              <td>4/11</td>
-              <td>이차방정식 - 근의 공식, 판별식</td>
-              <td><span class="badge badge-success">발송완료</span></td>
-              <td><button class="btn btn-sm btn-secondary">보기</button></td>
-            </tr>
-            <tr>
-              <td>4/8</td>
-              <td>이차방정식 - 인수분해 풀이</td>
-              <td><span class="badge badge-success">발송완료</span></td>
-              <td><button class="btn btn-sm btn-secondary">보기</button></td>
-            </tr>
-            <tr>
-              <td>4/4</td>
-              <td>이차방정식 개념 도입</td>
-              <td><span class="badge badge-success">발송완료</span></td>
-              <td><button class="btn btn-sm btn-secondary">보기</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div id="detail-materials" class="tab-content" style="display:none;">
-      <div class="card">
-        <div class="card-header">
-          <h3>Google Drive 자료</h3>
-          <button class="btn btn-sm btn-primary">+ 링크 추가</button>
-        </div>
-        <div class="drive-item">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <div><div style="font-weight:500;font-size:14px;">유인물 #6 - 이차방정식 연습</div><div style="font-size:12px;color:var(--gray-500);">PDF · 4/11 업로드</div></div>
-          </div>
-          <a href="#" class="btn btn-sm btn-secondary">열기</a>
-        </div>
-        <div class="drive-item">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <div><div style="font-weight:500;font-size:14px;">유인물 #5 - 인수분해 심화</div><div style="font-size:12px;color:var(--gray-500);">PDF · 4/7 업로드</div></div>
-          </div>
-          <a href="#" class="btn btn-sm btn-secondary">열기</a>
-        </div>
-        <div class="drive-item">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <div><div style="font-weight:500;font-size:14px;">개념원리 중3-2 추가문제</div><div style="font-size:12px;color:var(--gray-500);">PDF · 3/28 업로드</div></div>
-          </div>
-          <a href="#" class="btn btn-sm btn-secondary">열기</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== Upload ==================== -->
-  <div class="page" id="page-upload">
-    <div class="page-header">
-      <div>
-        <h1>수업 녹화 업로드</h1>
-        <div class="subtitle">수업 녹화 파일을 업로드하면 AI가 자동으로 리포트를 생성합니다</div>
-      </div>
-    </div>
-
-    <div class="card" id="upload-step1">
-      <div class="grid-2">
-        <div class="form-group">
-          <label>학생 선택</label>
-          <select class="form-input" id="upload-student">
-            <option value="">선택하세요</option>
-            <option value="park">박지현 (중3 · 수학)</option>
-            <option value="lee">이준호 (고1 · 과학)</option>
-            <option value="kim">김민서 (중2 · 수학)</option>
-            <option value="choi">최서연 (고2 · 수학)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>수업 날짜</label>
-          <input type="date" class="form-input" value="2026-04-13">
-        </div>
-      </div>
-
-      <div class="upload-area" onclick="startProcessing()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <p class="upload-main">클릭하여 녹화 파일 업로드</p>
-        <p>MP4, WebM, MKV (최대 2시간)</p>
-      </div>
-    </div>
-
-    <!-- Processing state -->
-    <div class="card" id="upload-processing" style="display:none;">
-      <h3 style="margin-bottom:8px;">수업 분석 중...</h3>
-      <p style="color:var(--gray-500);font-size:14px;margin-bottom:20px;">박지현 · 2026.04.13 수업</p>
-
-      <div class="process-steps">
-        <div class="process-step done" id="step1">
-          <div class="step-icon">&#10003;</div>
-          <div>
-            <div class="step-text">음성 추출</div>
-            <div class="step-sub">mp4에서 오디오 트랙 분리 완료</div>
-          </div>
-        </div>
-        <div class="process-step done" id="step2">
-          <div class="step-icon">&#10003;</div>
-          <div>
-            <div class="step-text">30초 청크 분할</div>
-            <div class="step-sub">237개 청크 생성 완료</div>
-          </div>
-        </div>
-        <div class="process-step active" id="step3">
-          <div class="step-icon"><div class="spinner" style="width:20px;height:20px;border-width:2px;"></div></div>
-          <div>
-            <div class="step-text">음성 인식 (Gemma 4 E4B)</div>
-            <div class="step-sub">청크 처리중... 184/237 (78%)</div>
-          </div>
-        </div>
-        <div class="process-step" id="step4">
-          <div class="step-icon">4</div>
-          <div>
-            <div class="step-text">수업 내용 요약 (Gemma 4 27B)</div>
-            <div class="step-sub">대기중</div>
-          </div>
-        </div>
-        <div class="process-step" id="step5">
-          <div class="step-icon">5</div>
-          <div>
-            <div class="step-text">학부모 리포트 생성</div>
-            <div class="step-sub">대기중</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="progress-bar" style="height:12px;">
-        <div class="progress-fill" style="width:65%;background:var(--primary);"></div>
-      </div>
-      <div style="text-align:center;margin-top:8px;font-size:13px;color:var(--gray-500);">예상 소요시간: 약 3분</div>
-    </div>
-
-    <!-- Done state -->
-    <div class="card" id="upload-done" style="display:none;">
-      <div style="text-align:center;padding:16px 0;">
-        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--success)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="16 10 11 16 8 13"/></svg>
-        <h3 style="margin-top:12px;">리포트 생성 완료!</h3>
-        <p style="color:var(--gray-500);font-size:14px;margin-top:4px;">박지현 · 2026.04.13 수업</p>
-      </div>
-
-      <div class="report-preview" style="margin-top:20px;">
-[수업 리포트] 박지현 · 4월 13일
-
-■ 오늘 수업 내용
-- 이차방정식의 활용 (교재 p.52~55)
-- 실생활 문제를 이차방정식으로 세우는 연습
-- 넓이, 연속하는 수, 시간/거리 문제 유형 학습
-
-■ 학습 태도 및 이해도
-- 방정식 세우기까지는 잘 하지만, 문제에서 조건을 놓치는 경우가 있음
-- 특히 "양수 조건" 확인을 빠뜨리는 실수 반복
-- 풀이 속도는 빨라지고 있으며, 근의 공식 적용은 안정적
-
-■ 숙제
-- 교재 p.56~58 연습문제 (1~12번)
-- 유인물 #7 (이차방정식 활용 심화)
-
-■ 다음 수업 예고
-- 이차함수 y=ax² 그래프 도입
-- 이차방정식과 이차함수의 관계
-
-■ 선생님 코멘트
-지현이가 문장제 문제 해석력이 많이 좋아졌습니다.
-다만 답을 구한 후 문제 조건에 맞는지 검증하는 습관을 들이면 더 좋겠습니다.
-      </div>
-
-      <div style="display:flex;gap:12px;margin-top:20px;justify-content:center;">
-        <button class="btn btn-secondary" onclick="navigate('reports')">수정하기</button>
-        <button class="btn btn-primary">리포트 복사 (학원 시스템 붙여넣기용)</button>
-        <button class="btn btn-success">진도 & 숙제 자동 업데이트</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== Reports ==================== -->
-  <div class="page" id="page-reports">
-    <div class="page-header">
-      <div>
-        <h1>학부모 리포트</h1>
-        <div class="subtitle">AI가 생성한 리포트를 검토하고 발송하세요</div>
-      </div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab active">전체</button>
-      <button class="tab">미발송 (3)</button>
-      <button class="tab">검토중 (1)</button>
-      <button class="tab">발송완료</button>
-    </div>
-
-    <div class="card">
-      <table>
-        <thead><tr><th>학생</th><th>수업일</th><th>주요 내용</th><th>상태</th><th></th></tr></thead>
-        <tbody>
-          <tr>
-            <td><div class="avatar-row"><div class="avatar" style="background:#6366F1;width:28px;height:28px;font-size:11px">박</div>박지현</div></td>
-            <td>4/13</td>
-            <td>이차방정식의 활용</td>
-            <td><span class="badge badge-warning">검토중</span></td>
-            <td><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-secondary">수정</button><button class="btn btn-sm btn-primary">발송</button></div></td>
-          </tr>
-          <tr>
-            <td><div class="avatar-row"><div class="avatar" style="background:#EC4899;width:28px;height:28px;font-size:11px">이</div>이준호</div></td>
-            <td>4/11</td>
-            <td>뉴턴의 제2법칙, F=ma</td>
-            <td><span class="badge badge-danger">미발송</span></td>
-            <td><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-secondary">수정</button><button class="btn btn-sm btn-primary">발송</button></div></td>
-          </tr>
-          <tr>
-            <td><div class="avatar-row"><div class="avatar" style="background:#10B981;width:28px;height:28px;font-size:11px">김</div>김민서</div></td>
-            <td>4/10</td>
-            <td>일차함수 그래프</td>
-            <td><span class="badge badge-danger">미발송</span></td>
-            <td><div style="display:flex;gap:8px;"><button class="btn btn-sm btn-secondary">수정</button><button class="btn btn-sm btn-primary">발송</button></div></td>
-          </tr>
-          <tr>
-            <td><div class="avatar-row"><div class="avatar" style="background:#6366F1;width:28px;height:28px;font-size:11px">박</div>박지현</div></td>
-            <td>4/11</td>
-            <td>이차방정식 - 근의 공식</td>
-            <td><span class="badge badge-success">발송완료</span></td>
-            <td><button class="btn btn-sm btn-secondary">보기</button></td>
-          </tr>
-          <tr>
-            <td><div class="avatar-row"><div class="avatar" style="background:#F59E0B;width:28px;height:28px;font-size:11px">최</div>최서연</div></td>
-            <td>4/10</td>
-            <td>경우의 수 - 순열</td>
-            <td><span class="badge badge-success">발송완료</span></td>
-            <td><button class="btn btn-sm btn-secondary">보기</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- ==================== Materials ==================== -->
-  <div class="page" id="page-materials">
-    <div class="page-header">
-      <div>
-        <h1>교재/자료 관리</h1>
-        <div class="subtitle">학생별 교재 진도와 Google Drive 자료를 관리하세요</div>
-      </div>
-      <button class="btn btn-primary" onclick="openModal('add-material-modal')">+ 자료 추가</button>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header"><h3>교재별 진도 현황</h3></div>
-        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--gray-100);">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-            <div>
-              <div style="font-weight:500;">개념원리 중3-2</div>
-              <div style="font-size:12px;color:var(--gray-500);">박지현</div>
-            </div>
-            <span style="font-size:13px;color:var(--gray-500);">40%</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:40%;background:var(--primary)"></div></div>
-        </div>
-        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--gray-100);">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-            <div>
-              <div style="font-weight:500;">물리학I</div>
-              <div style="font-size:12px;color:var(--gray-500);">이준호</div>
-            </div>
-            <span style="font-size:13px;color:var(--gray-500);">39%</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:39%;background:#EC4899"></div></div>
-        </div>
-        <div style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--gray-100);">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-            <div>
-              <div style="font-weight:500;">쎈 중2-1</div>
-              <div style="font-size:12px;color:var(--gray-500);">김민서</div>
-            </div>
-            <span style="font-size:13px;color:var(--gray-500);">55%</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:55%;background:var(--success)"></div></div>
-        </div>
-        <div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-            <div>
-              <div style="font-weight:500;">수학의 정석 확통</div>
-              <div style="font-size:12px;color:var(--gray-500);">최서연</div>
-            </div>
-            <span style="font-size:13px;color:var(--gray-500);">28%</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:28%;background:var(--warning)"></div></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-header"><h3>최근 업로드 자료</h3></div>
-        <div class="drive-item">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <div>
-              <div style="font-weight:500;font-size:14px;">유인물 #7 - 이차방정식 활용</div>
-              <div style="font-size:12px;color:var(--gray-500);">박지현 · 4/13</div>
-            </div>
-          </div>
-          <a href="#" class="btn btn-sm btn-secondary">열기</a>
-        </div>
-        <div class="drive-item">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <div>
-              <div style="font-weight:500;font-size:14px;">뉴턴 법칙 정리노트</div>
-              <div style="font-size:12px;color:var(--gray-500);">이준호 · 4/11</div>
-            </div>
-          </div>
-          <a href="#" class="btn btn-sm btn-secondary">열기</a>
-        </div>
-        <div class="drive-item">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <svg class="drive-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <div>
-              <div style="font-weight:500;font-size:14px;">일차함수 개념맵</div>
-              <div style="font-size:12px;color:var(--gray-500);">김민서 · 4/9</div>
-            </div>
-          </div>
-          <a href="#" class="btn btn-sm btn-secondary">열기</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== Schedule ==================== -->
-  <div class="page" id="page-schedule">
-    <div class="page-header">
-      <div>
-        <h1>수업 일정</h1>
-        <div class="subtitle">이번 주 수업 일정</div>
-      </div>
-      <button class="btn btn-primary">+ 수업 추가</button>
-    </div>
-
-    <div class="card">
-      <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr 1fr 1fr 1fr 1fr;gap:1px;background:var(--gray-200);border-radius:8px;overflow:hidden;">
-        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;"></div>
-        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">월 (4/13)</div>
-        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">화 (4/14)</div>
-        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">수 (4/15)</div>
-        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">목 (4/16)</div>
-        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">금 (4/17)</div>
-        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">토 (4/18)</div>
-        <div style="background:var(--gray-50);padding:12px;font-size:13px;font-weight:600;text-align:center;">일 (4/19)</div>
-
-        <!-- 14:00 row -->
-        <div style="background:white;padding:12px;font-size:13px;color:var(--gray-500);text-align:center;">14:00</div>
-        <div style="background:white;padding:8px;">
-          <div style="background:var(--primary-bg);border-left:3px solid var(--primary);padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">박지현</div>
-            <div style="color:var(--gray-500);">수학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;">
-          <div style="background:var(--primary-bg);border-left:3px solid var(--primary);padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">박지현</div>
-            <div style="color:var(--gray-500);">수학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;">
-          <div style="background:var(--primary-bg);border-left:3px solid var(--primary);padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">박지현</div>
-            <div style="color:var(--gray-500);">수학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;"></div>
-
-        <!-- 16:00 row -->
-        <div style="background:white;padding:12px;font-size:13px;color:var(--gray-500);text-align:center;">16:00</div>
-        <div style="background:white;padding:8px;">
-          <div style="background:#FCE7F3;border-left:3px solid #EC4899;padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">이준호</div>
-            <div style="color:var(--gray-500);">과학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;">
-          <div style="background:#FCE7F3;border-left:3px solid #EC4899;padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">이준호</div>
-            <div style="color:var(--gray-500);">과학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;"></div>
-
-        <!-- 17:00 row -->
-        <div style="background:white;padding:12px;font-size:13px;color:var(--gray-500);text-align:center;">17:00</div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;">
-          <div style="background:#D1FAE5;border-left:3px solid #10B981;padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">김민서</div>
-            <div style="color:var(--gray-500);">수학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;">
-          <div style="background:#D1FAE5;border-left:3px solid #10B981;padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">김민서</div>
-            <div style="color:var(--gray-500);">수학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;"></div>
-
-        <!-- 19:00 row -->
-        <div style="background:white;padding:12px;font-size:13px;color:var(--gray-500);text-align:center;">19:00</div>
-        <div style="background:white;padding:8px;">
-          <div style="background:var(--warning-bg);border-left:3px solid var(--warning);padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">최서연</div>
-            <div style="color:var(--gray-500);">수학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;">
-          <div style="background:var(--warning-bg);border-left:3px solid var(--warning);padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">최서연</div>
-            <div style="color:var(--gray-500);">수학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-        <div style="background:white;padding:8px;">
-          <div style="background:var(--warning-bg);border-left:3px solid var(--warning);padding:8px;border-radius:4px;font-size:12px;">
-            <div style="font-weight:600;">최서연</div>
-            <div style="color:var(--gray-500);">수학</div>
-          </div>
-        </div>
-        <div style="background:white;padding:8px;"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Add Student Modal -->
-<div class="modal-overlay" id="add-student-modal">
-  <div class="modal">
-    <h2>학생 추가</h2>
-    <div class="grid-2">
-      <div class="form-group">
-        <label>학생 이름</label>
-        <input type="text" class="form-input" placeholder="홍길동">
-      </div>
-      <div class="form-group">
-        <label>학년</label>
-        <select class="form-input">
-          <option>중1</option><option>중2</option><option>중3</option>
-          <option>고1</option><option>고2</option><option>고3</option>
-        </select>
-      </div>
-    </div>
-    <div class="grid-2">
-      <div class="form-group">
-        <label>과목</label>
-        <input type="text" class="form-input" placeholder="수학">
-      </div>
-      <div class="form-group">
-        <label>학부모 이름</label>
-        <input type="text" class="form-input" placeholder="홍부모">
-      </div>
-    </div>
-    <div class="form-group">
-      <label>사용 교재</label>
-      <input type="text" class="form-input" placeholder="개념원리 중3-2">
-    </div>
-    <div class="form-group">
-      <label>수업 요일/시간</label>
-      <input type="text" class="form-input" placeholder="월/수/금 14:00">
-    </div>
-    <div class="form-group">
-      <label>메모</label>
-      <textarea class="form-input" placeholder="학생 특이사항, 학습 목표 등"></textarea>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeModal('add-student-modal')">취소</button>
-      <button class="btn btn-primary" onclick="closeModal('add-student-modal')">추가</button>
-    </div>
-  </div>
-</div>
-
-<!-- Add Material Modal -->
-<div class="modal-overlay" id="add-material-modal">
-  <div class="modal">
-    <h2>자료 추가</h2>
-    <div class="form-group">
-      <label>학생</label>
-      <select class="form-input">
-        <option>박지현</option><option>이준호</option><option>김민서</option><option>최서연</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>자료 이름</label>
-      <input type="text" class="form-input" placeholder="유인물 #8 - 이차함수">
-    </div>
-    <div class="form-group">
-      <label>Google Drive 링크</label>
-      <input type="text" class="form-input" placeholder="https://drive.google.com/file/d/...">
-    </div>
-    <div class="form-group">
-      <label>유형</label>
-      <select class="form-input">
-        <option>유인물</option><option>교재 부교재</option><option>시험지</option><option>기타</option>
-      </select>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" onclick="closeModal('add-material-modal')">취소</button>
-      <button class="btn btn-primary" onclick="closeModal('add-material-modal')">추가</button>
-    </div>
-  </div>
-</div>
+<!-- Modal Container -->
+<div id="modals"></div>
 
 <script>
-  // Navigation
-  function navigate(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
-    const navLink = document.querySelector(`[data-page="${page}"]`);
-    if (navLink) navLink.classList.add('active');
-  }
+// ============ DATA ============
+const STUDENTS = [
+  {id:1,name:'박지현',initial:'박',color:'#6366F1',grade:'중3',subject:'수학',parent:'박영수',textbook:'개념원리 중3-2',currentPage:48,totalPages:120,chapter:'Ch.3 이차방정식',schedule:'월/수/금 14:00',memo:'근의 공식 대입 정확, 판별식 부호 실수 잦음'},
+  {id:2,name:'이준호',initial:'이',color:'#EC4899',grade:'고1',subject:'과학',parent:'이미경',textbook:'물리학I',currentPage:35,totalPages:90,chapter:'Ch.2 뉴턴의 운동법칙',schedule:'월/수 16:00',memo:'실험 보고서 잘 쓰는 편, 수식 전개 약간 약함'},
+  {id:3,name:'김민서',initial:'김',color:'#10B981',grade:'중2',subject:'수학',parent:'김정호',textbook:'쎈 중2-1',currentPage:82,totalPages:150,chapter:'Ch.5 일차함수',schedule:'화/목 17:00',memo:'계산 속도 빠름, 서술형 문제 약함'},
+  {id:4,name:'최서연',initial:'최',color:'#F59E0B',grade:'고2',subject:'수학',parent:'최은영',textbook:'수학의 정석 확통',currentPage:22,totalPages:80,chapter:'Ch.1 경우의 수',schedule:'월/목/토 19:00',memo:'개념 이해 빠르나 응용 문제에서 막힘'}
+];
 
-  document.querySelectorAll('.sidebar nav a').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      navigate(link.dataset.page);
-    });
+const HOMEWORK = [
+  {id:1,studentId:1,content:'교재 p.52~55 풀이',status:'진행중',progress:75,items:[{t:'p.52 예제 1~5',done:true},{t:'p.53 연습 1~8',done:true},{t:'p.54 심화 1~5',done:false},{t:'유인물 #6 오답노트',done:false}]},
+  {id:2,studentId:2,content:'실험 보고서 작성',status:'완료',progress:100,items:[{t:'실험 보고서 작성',done:true},{t:'교재 p.36 문제풀이',done:true}]},
+  {id:3,studentId:3,content:'유인물 #7 문제풀이',status:'미시작',progress:0,items:[{t:'유인물 #7 전체',done:false},{t:'교재 p.83~85',done:false}]},
+  {id:4,studentId:4,content:'경우의 수 연습문제',status:'완료',progress:100,items:[{t:'교재 p.23~25',done:true},{t:'유인물 #3',done:true}]}
+];
+
+const REPORTS = [
+  {id:1,studentId:1,date:'4/13',topic:'이차방정식의 활용',status:'검토중',text:`[수업 리포트] 박지현 · 4월 13일\n\n■ 오늘 수업 내용\n- 이차방정식의 활용 (교재 p.52~55)\n- 실생활 문제를 이차방정식으로 세우는 연습\n- 넓이, 연속하는 수, 시간/거리 문제 유형 학습\n\n■ 학습 태도 및 이해도\n- 방정식 세우기까지는 잘 하지만, 문제에서 조건을 놓치는 경우가 있음\n- 특히 "양수 조건" 확인을 빠뜨리는 실수 반복\n- 풀이 속도는 빨라지고 있으며, 근의 공식 적용은 안정적\n\n■ 숙제\n- 교재 p.56~58 연습문제 (1~12번)\n- 유인물 #7 (이차방정식 활용 심화)\n\n■ 다음 수업 예고\n- 이차함수 y=ax² 그래프 도입\n\n■ 선생님 코멘트\n지현이가 문장제 문제 해석력이 많이 좋아졌습니다.\n다만 답을 구한 후 문제 조건에 맞는지 검증하는 습관을 들이면 더 좋겠습니다.`},
+  {id:2,studentId:2,date:'4/11',topic:'뉴턴의 제2법칙, F=ma',status:'미발송',text:`[수업 리포트] 이준호 · 4월 11일\n\n■ 오늘 수업 내용\n- 뉴턴의 제2법칙 F=ma 공식 유도\n- 힘, 질량, 가속도의 관계 실험 분석\n\n■ 학습 태도 및 이해도\n- 개념 이해는 빠르나 단위 환산에서 실수\n- 자유 물체도 그리기 연습 필요\n\n■ 숙제\n- 교재 p.36~38 문제풀이\n\n■ 다음 수업 예고\n- 뉴턴의 제3법칙 (작용-반작용)\n\n■ 선생님 코멘트\n준호가 물리에 흥미를 보이고 있어 좋습니다.`},
+  {id:3,studentId:3,date:'4/10',topic:'일차함수 그래프',status:'미발송',text:`[수업 리포트] 김민서 · 4월 10일\n\n■ 오늘 수업 내용\n- 일차함수 y=ax+b 그래프 그리기\n- 기울기와 y절편의 의미\n\n■ 학습 태도 및 이해도\n- 그래프 그리기는 정확하나 기울기 부호 판별 연습 필요\n\n■ 숙제\n- 교재 p.83~85\n- 유인물 #7\n\n■ 선생님 코멘트\n민서가 꾸준히 성장하고 있습니다.`},
+  {id:4,studentId:1,date:'4/11',topic:'이차방정식 - 근의 공식',status:'발송완료',text:'[수업 리포트] 박지현 · 4월 11일\n\n■ 근의 공식 학습 완료...'},
+  {id:5,studentId:4,date:'4/10',topic:'경우의 수 - 순열',status:'발송완료',text:'[수업 리포트] 최서연 · 4월 10일\n\n■ 순열 개념 학습 완료...'}
+];
+
+const MATERIALS = [
+  {id:1,studentId:1,name:'유인물 #7 - 이차방정식 활용',type:'유인물',date:'4/13',link:'#'},
+  {id:2,studentId:1,name:'유인물 #6 - 이차방정식 연습',type:'유인물',date:'4/11',link:'#'},
+  {id:3,studentId:2,name:'뉴턴 법칙 정리노트',type:'유인물',date:'4/11',link:'#'},
+  {id:4,studentId:3,name:'일차함수 개념맵',type:'유인물',date:'4/9',link:'#'},
+  {id:5,studentId:1,name:'개념원리 중3-2 추가문제',type:'교재부교재',date:'3/28',link:'#'},
+  {id:6,studentId:4,name:'경우의 수 실전문제',type:'시험지',date:'4/8',link:'#'}
+];
+
+const SCHEDULE_DATA = [
+  {studentId:1,days:[1,3,5],time:'14:00'},
+  {studentId:2,days:[1,3],time:'16:00'},
+  {studentId:3,days:[2,4],time:'17:00'},
+  {studentId:4,days:[1,4,6],time:'19:00'}
+];
+
+const LESSONS = [
+  {studentId:1,date:'4/11',content:'근의 공식 대입 정확, 판별식 부호 실수 잦음. 반복 연습 필요.'},
+  {studentId:1,date:'4/8',content:'인수분해로 이차방정식 풀기 완료. 완전제곱식은 잘 하는 편.'},
+  {studentId:1,date:'4/4',content:'이차방정식 개념 도입. 흥미를 보이며 이해 빠름.'}
+];
+
+const DAY_NAMES = ['','월','화','수','목','금','토','일'];
+const TODAY = '2026년 4월 13일 일요일';
+
+// ============ NAV ============
+const NAV_ITEMS = [
+  {id:'dashboard',icon:'📊',label:'대시보드'},
+  {id:'students',icon:'👥',label:'학생 관리'},
+  {id:'upload',icon:'📤',label:'수업 녹화 업로드'},
+  {id:'reports',icon:'📝',label:'학부모 리포트'},
+  {id:'materials',icon:'📁',label:'교재/자료 관리'},
+  {id:'schedule',icon:'📅',label:'수업 일정'}
+];
+
+let currentPage = 'dashboard';
+let currentStudentId = null;
+let reportFilter = '전체';
+
+function renderNav(){
+  document.getElementById('nav').innerHTML = NAV_ITEMS.map(n=>
+    `<a href="#" data-page="${n.id}" class="${currentPage===n.id?'active':''}" onclick="navigate('${n.id}');return false;">
+      ${n.icon} <span>${n.label}</span>
+    </a>`
+  ).join('');
+}
+
+function navigate(page, studentId){
+  currentPage = page;
+  if(studentId) currentStudentId = studentId;
+  renderNav();
+  render();
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function getStudent(id){ return STUDENTS.find(s=>s.id===id); }
+
+// ============ RENDER ============
+function render(){
+  const app = document.getElementById('app');
+  switch(currentPage){
+    case 'dashboard': app.innerHTML = renderDashboard(); break;
+    case 'students': app.innerHTML = renderStudents(); break;
+    case 'student-detail': app.innerHTML = renderStudentDetail(); break;
+    case 'upload': app.innerHTML = renderUpload(); break;
+    case 'reports': app.innerHTML = renderReports(); break;
+    case 'materials': app.innerHTML = renderMaterials(); break;
+    case 'schedule': app.innerHTML = renderSchedule(); break;
+  }
+}
+
+// ============ DASHBOARD ============
+function renderDashboard(){
+  const pending = REPORTS.filter(r=>r.status!=='발송완료').length;
+  const hwBad = HOMEWORK.filter(h=>h.progress<50).length;
+  const todayLessons = [{time:'14:00',s:STUDENTS[0],topic:'이차방정식의 활용'},{time:'16:00',s:STUDENTS[1],topic:'뉴턴의 운동법칙'},{time:'19:00',s:STUDENTS[3],topic:'확률과 통계'}];
+
+  return `
+  <div class="page-header"><div><h1>대시보드</h1><div class="subtitle">${TODAY}</div></div></div>
+  <div class="stats">
+    <div class="stat-card"><div class="stat-icon" style="background:var(--primary-bg)">👥</div><div class="stat-value">${STUDENTS.length}</div><div class="stat-label">담당 학생</div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--success-bg)">✅</div><div class="stat-value">8</div><div class="stat-label">이번 주 완료 수업</div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--warning-bg)">📝</div><div class="stat-value">${pending}</div><div class="stat-label">미발송 리포트</div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--danger-bg)">⚠️</div><div class="stat-value">${hwBad}</div><div class="stat-label">숙제 미완료 학생</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>오늘 수업 일정</h3><button class="btn btn-sm btn-secondary" onclick="navigate('schedule')">전체보기</button></div>
+      ${todayLessons.map(l=>`
+        <div class="sched-item">
+          <div style="font-size:14px;font-weight:600;color:var(--primary);width:60px">${l.time}</div>
+          <div class="avatar-row"><div class="avatar" style="background:${l.s.color}">${l.s.initial}</div>
+          <div><div style="font-weight:500;font-size:13px">${l.s.name}</div><div style="font-size:12px;color:var(--g500)">${l.s.subject} - ${l.topic}</div></div></div>
+          <span class="badge badge-info">예정</span>
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>최근 리포트</h3><button class="btn btn-sm btn-secondary" onclick="navigate('reports')">전체보기</button></div>
+      <table><thead><tr><th>학생</th><th>날짜</th><th>상태</th></tr></thead><tbody>
+      ${REPORTS.slice(0,4).map(r=>{const s=getStudent(r.studentId);return `
+        <tr onclick="viewReport(${r.id})" style="cursor:pointer">
+          <td><div class="avatar-row"><div class="avatar" style="background:${s.color};width:26px;height:26px;font-size:10px">${s.initial}</div>${s.name}</div></td>
+          <td>${r.date}</td>
+          <td><span class="badge badge-${r.status==='발송완료'?'success':r.status==='검토중'?'warning':'danger'}">${r.status}</span></td>
+        </tr>`}).join('')}
+      </tbody></table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h3>숙제 현황</h3></div>
+    <table><thead><tr><th>학생</th><th>과목</th><th>숙제 내용</th><th>진행률</th><th>상태</th></tr></thead><tbody>
+    ${HOMEWORK.map(h=>{const s=getStudent(h.studentId);const c=h.progress>=100?'var(--success)':h.progress>0?'var(--primary)':'var(--danger)';return `
+      <tr>
+        <td><div class="avatar-row"><div class="avatar" style="background:${s.color};width:26px;height:26px;font-size:10px">${s.initial}</div>${s.name}</div></td>
+        <td>${s.subject}</td><td>${h.content}</td>
+        <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="width:100px"><div class="progress-fill" style="width:${h.progress}%;background:${c}"></div></div><span style="font-size:12px;color:var(--g500)">${h.progress}%</span></div></td>
+        <td><span class="badge badge-${h.status==='완료'?'success':h.status==='진행중'?'warning':'danger'}">${h.status}</span></td>
+      </tr>`}).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+// ============ STUDENTS ============
+function renderStudents(){
+  return `
+  <div class="page-header"><div><h1>학생 관리</h1><div class="subtitle">담당 학생 목록 및 진도 관리</div></div>
+    <button class="btn btn-primary" onclick="openAddStudent()">+ 학생 추가</button></div>
+  <div class="card"><table><thead><tr><th>학생</th><th>학년</th><th>과목</th><th>진도</th><th>다음 수업</th><th>숙제</th><th></th></tr></thead><tbody>
+  ${STUDENTS.map(s=>{
+    const hw=HOMEWORK.find(h=>h.studentId===s.id);
+    const pct=Math.round(s.currentPage/s.totalPages*100);
+    return `<tr onclick="navigate('student-detail',${s.id})" style="cursor:pointer">
+      <td><div class="avatar-row"><div class="avatar" style="background:${s.color}">${s.initial}</div><div><div style="font-weight:500">${s.name}</div><div style="font-size:11px;color:var(--g500)">학부모: ${s.parent}</div></div></div></td>
+      <td>${s.grade}</td><td>${s.subject}</td>
+      <td><div style="font-size:12px">${s.textbook}<br><span style="color:var(--g500)">${s.chapter} (p.${s.currentPage}/${s.totalPages})</span></div></td>
+      <td style="font-size:12px">${s.schedule}</td>
+      <td>${hw?`<span class="badge badge-${hw.status==='완료'?'success':hw.status==='진행중'?'warning':'danger'}">${hw.status} ${hw.progress}%</span>`:'-'}</td>
+      <td><button class="btn btn-sm btn-secondary" onclick="event.stopPropagation();navigate('student-detail',${s.id})">상세</button></td>
+    </tr>`}).join('')}
+  </tbody></table></div>`;
+}
+
+// ============ STUDENT DETAIL ============
+function renderStudentDetail(){
+  const s = getStudent(currentStudentId) || STUDENTS[0];
+  const hw = HOMEWORK.find(h=>h.studentId===s.id);
+  const mats = MATERIALS.filter(m=>m.studentId===s.id);
+  const reps = REPORTS.filter(r=>r.studentId===s.id);
+  const lessons = LESSONS.filter(l=>l.studentId===s.id);
+  const pct = Math.round(s.currentPage/s.totalPages*100);
+
+  return `
+  <div class="page-header"><div style="display:flex;align-items:center;gap:14px">
+    <button class="btn btn-secondary btn-sm" onclick="navigate('students')">← 뒤로</button>
+    <div><h1>${s.name}</h1><div class="subtitle">${s.grade} · ${s.subject} · 학부모: ${s.parent}</div></div>
+  </div></div>
+  <div class="tabs">
+    <button class="tab active" onclick="showDetailTab(this,'dt-progress')">진도 관리</button>
+    <button class="tab" onclick="showDetailTab(this,'dt-hw')">숙제</button>
+    <button class="tab" onclick="showDetailTab(this,'dt-reports')">리포트 이력</button>
+    <button class="tab" onclick="showDetailTab(this,'dt-materials')">자료</button>
+  </div>
+
+  <div id="dt-progress">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><h3>현재 교재 진도</h3></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-weight:500">${s.textbook}</span>
+          <span style="color:var(--g500);font-size:12px">${s.currentPage} / ${s.totalPages} 페이지</span>
+        </div>
+        <div class="progress-bar" style="height:10px;margin-bottom:16px"><div class="progress-fill" style="width:${pct}%;background:var(--primary)"></div></div>
+        <div style="font-size:13px;color:var(--g600);line-height:2">
+          <div><strong>현재:</strong> ${s.chapter}</div>
+          <div><strong>메모:</strong> ${s.memo}</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h3>수업 메모</h3></div>
+        ${lessons.map(l=>`<div style="padding:8px 0;border-bottom:1px solid var(--g100);font-size:13px">
+          <div style="font-weight:500">${l.date} 수업</div><div style="color:var(--g600)">${l.content}</div>
+        </div>`).join('')}
+        ${lessons.length===0?'<div style="color:var(--g400);font-size:13px">수업 기록이 없습니다</div>':''}
+      </div>
+    </div>
+  </div>
+
+  <div id="dt-hw" style="display:none">
+    <div class="card">
+      <div class="card-header"><h3>현재 숙제</h3><button class="btn btn-sm btn-primary" onclick="toast('목업: 숙제 추가')">+ 숙제 추가</button></div>
+      ${hw?hw.items.map((item,i)=>`
+        <div class="hw-item">
+          <input type="checkbox" ${item.done?'checked':''} onchange="toggleHw(${hw.id},${i})">
+          <label style="flex:1;${item.done?'text-decoration:line-through;color:var(--g400)':''}">${item.t}</label>
+          <span class="badge badge-${item.done?'success':'warning'}">${item.done?'완료':'미완료'}</span>
+        </div>`).join(''):'<div style="color:var(--g400);font-size:13px">숙제가 없습니다</div>'}
+    </div>
+  </div>
+
+  <div id="dt-reports" style="display:none">
+    <div class="card">
+      <div class="card-header"><h3>학부모 리포트 이력</h3></div>
+      <table><thead><tr><th>날짜</th><th>수업 내용</th><th>상태</th><th></th></tr></thead><tbody>
+      ${reps.map(r=>`<tr>
+        <td>${r.date}</td><td>${r.topic}</td>
+        <td><span class="badge badge-${r.status==='발송완료'?'success':r.status==='검토중'?'warning':'danger'}">${r.status}</span></td>
+        <td><button class="btn btn-sm btn-secondary" onclick="viewReport(${r.id})">보기</button></td>
+      </tr>`).join('')}
+      </tbody></table>
+    </div>
+  </div>
+
+  <div id="dt-materials" style="display:none">
+    <div class="card">
+      <div class="card-header"><h3>Google Drive 자료</h3><button class="btn btn-sm btn-primary" onclick="toast('목업: 링크 추가')">+ 링크 추가</button></div>
+      ${mats.map(m=>`<div class="drive-item">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span>📄</span>
+          <div><div style="font-weight:500;font-size:13px">${m.name}</div><div style="font-size:11px;color:var(--g500)">${m.type} · ${m.date}</div></div>
+        </div>
+        <button class="btn btn-sm btn-secondary" onclick="toast('목업: Google Drive 열기')">열기</button>
+      </div>`).join('')}
+      ${mats.length===0?'<div style="color:var(--g400);font-size:13px">자료가 없습니다</div>':''}
+    </div>
+  </div>`;
+}
+
+function showDetailTab(btn, id){
+  btn.parentElement.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  ['dt-progress','dt-hw','dt-reports','dt-materials'].forEach(t=>{
+    const el=document.getElementById(t);if(el)el.style.display=t===id?'block':'none';
   });
+}
 
-  // Modal
-  function openModal(id) {
-    document.getElementById(id).classList.add('active');
+function toggleHw(hwId, itemIdx){
+  const hw=HOMEWORK.find(h=>h.id===hwId);
+  if(hw){
+    hw.items[itemIdx].done=!hw.items[itemIdx].done;
+    const done=hw.items.filter(i=>i.done).length;
+    hw.progress=Math.round(done/hw.items.length*100);
+    hw.status=hw.progress===100?'완료':hw.progress>0?'진행중':'미시작';
+    render();
+    toast(hw.items[itemIdx].done?'숙제 항목 완료!':'숙제 항목 미완료로 변경');
   }
-  function closeModal(id) {
-    document.getElementById(id).classList.remove('active');
+}
+
+// ============ UPLOAD ============
+function renderUpload(){
+  return `
+  <div class="page-header"><div><h1>수업 녹화 업로드</h1><div class="subtitle">수업 녹화 파일을 업로드하면 AI가 자동으로 리포트를 생성합니다</div></div></div>
+  <div class="card" id="upload-form">
+    <div class="grid-2">
+      <div class="form-group"><label>학생 선택</label>
+        <select class="form-input" id="sel-student">
+          <option value="">선택하세요</option>
+          ${STUDENTS.map(s=>`<option value="${s.id}">${s.name} (${s.grade} · ${s.subject})</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group"><label>수업 날짜</label><input type="date" class="form-input" value="2026-04-13"></div>
+    </div>
+    <div class="upload-area" onclick="startUpload()">
+      <div class="icon">📤</div>
+      <div class="upload-main">클릭하여 녹화 파일 업로드</div>
+      <div class="upload-sub">MP4, WebM, MKV (최대 2시간) — 목업에서는 클릭만 하면 시뮬레이션됩니다</div>
+    </div>
+  </div>
+  <div class="card" id="upload-progress" style="display:none">
+    <h3>수업 분석 중...</h3>
+    <p style="color:var(--g500);font-size:13px;margin:4px 0 16px" id="upload-info"></p>
+    <div class="process-steps" id="process-steps"></div>
+    <div class="progress-bar" style="height:10px"><div class="progress-fill" id="total-progress" style="width:0%;background:var(--primary)"></div></div>
+    <div style="text-align:center;margin-top:6px;font-size:12px;color:var(--g500)">예상 소요시간: 약 3분</div>
+  </div>
+  <div class="card" id="upload-done" style="display:none"></div>`;
+}
+
+const STEPS=[
+  {text:'음성 추출',sub:'mp4에서 오디오 트랙 분리'},
+  {text:'30초 청크 분할',sub:'청크 생성'},
+  {text:'음성 인식 (Gemma 4 E4B)',sub:'한국어 STT 처리중...'},
+  {text:'수업 내용 요약 (Gemma 4 27B)',sub:'내용 분석중...'},
+  {text:'학부모 리포트 생성',sub:'리포트 작성중...'}
+];
+
+function startUpload(){
+  const sid=document.getElementById('sel-student').value;
+  if(!sid){toast('학생을 먼저 선택해주세요');return;}
+  const s=getStudent(parseInt(sid));
+
+  document.getElementById('upload-form').style.display='none';
+  document.getElementById('upload-progress').style.display='block';
+  document.getElementById('upload-info').textContent=`${s.name} · 2026.04.13 수업`;
+
+  const stepsEl=document.getElementById('process-steps');
+  stepsEl.innerHTML=STEPS.map((st,i)=>`
+    <div class="process-step" id="pstep-${i}">
+      <div class="step-icon" id="picon-${i}">${i+1}</div>
+      <div><div class="step-text">${st.text}</div><div class="step-sub" id="psub-${i}">${st.sub}</div></div>
+    </div>`).join('');
+
+  let step=0;
+  const pcts=[20,40,70,90,100];
+  const subs=['오디오 트랙 분리 완료','237개 청크 생성 완료','237/237 청크 처리 완료','요약 완료','리포트 작성 완료'];
+
+  function advance(){
+    if(step>0){
+      const prev=step-1;
+      document.getElementById('pstep-'+prev).className='process-step done';
+      document.getElementById('picon-'+prev).innerHTML='✓';
+      document.getElementById('psub-'+prev).textContent=subs[prev];
+    }
+    if(step<STEPS.length){
+      document.getElementById('pstep-'+step).className='process-step active';
+      document.getElementById('picon-'+step).innerHTML='<span class="spinner"></span>';
+      document.getElementById('total-progress').style.width=pcts[step]+'%';
+      step++;
+      setTimeout(advance, 800+Math.random()*400);
+    } else {
+      showUploadDone(s);
+    }
   }
-  document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', e => {
-      if (e.target === overlay) overlay.classList.remove('active');
-    });
+  advance();
+}
+
+function showUploadDone(s){
+  document.getElementById('upload-progress').style.display='none';
+  const done=document.getElementById('upload-done');
+  done.style.display='block';
+
+  const report = REPORTS.find(r=>r.studentId===s.id) || REPORTS[0];
+  done.innerHTML=`
+    <div style="text-align:center;padding:12px 0">
+      <div style="font-size:40px">✅</div>
+      <h3 style="margin-top:8px">리포트 생성 완료!</h3>
+      <p style="color:var(--g500);font-size:13px;margin-top:4px">${s.name} · 2026.04.13 수업</p>
+    </div>
+    <div class="report-preview" style="margin-top:16px">${report.text}</div>
+    <div style="display:flex;gap:10px;margin-top:16px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-secondary" onclick="toast('목업: 리포트 수정 모드')">수정하기</button>
+      <button class="btn btn-primary" onclick="copyReport(\`${report.text.replace(/`/g,"'")}\`)">리포트 복사</button>
+      <button class="btn btn-success" onclick="toast('목업: 진도 & 숙제 자동 업데이트 완료!')">진도 & 숙제 업데이트</button>
+    </div>`;
+}
+
+function copyReport(text){
+  navigator.clipboard.writeText(text).then(()=>toast('리포트가 클립보드에 복사되었습니다!')).catch(()=>toast('복사 완료 (목업)'));
+}
+
+// ============ REPORTS ============
+function renderReports(){
+  const filters=['전체','미발송','검토중','발송완료'];
+  const filtered = reportFilter==='전체'?REPORTS:REPORTS.filter(r=>r.status===reportFilter);
+
+  return `
+  <div class="page-header"><div><h1>학부모 리포트</h1><div class="subtitle">AI가 생성한 리포트를 검토하고 발송하세요</div></div></div>
+  <div class="tabs">
+    ${filters.map(f=>{
+      const cnt=f==='전체'?REPORTS.length:REPORTS.filter(r=>r.status===f).length;
+      return `<button class="tab ${reportFilter===f?'active':''}" onclick="reportFilter='${f}';render()">${f} (${cnt})</button>`;
+    }).join('')}
+  </div>
+  <div class="card"><table><thead><tr><th>학생</th><th>수업일</th><th>주요 내용</th><th>상태</th><th></th></tr></thead><tbody>
+  ${filtered.map(r=>{const s=getStudent(r.studentId);return `<tr>
+    <td><div class="avatar-row"><div class="avatar" style="background:${s.color};width:26px;height:26px;font-size:10px">${s.initial}</div>${s.name}</div></td>
+    <td>${r.date}</td><td>${r.topic}</td>
+    <td><span class="badge badge-${r.status==='발송완료'?'success':r.status==='검토중'?'warning':'danger'}">${r.status}</span></td>
+    <td><div style="display:flex;gap:6px">
+      <button class="btn btn-sm btn-secondary" onclick="viewReport(${r.id})">보기</button>
+      ${r.status!=='발송완료'?`<button class="btn btn-sm btn-primary" onclick="sendReport(${r.id})">발송</button>`:''}
+    </div></td>
+  </tr>`}).join('')}
+  </tbody></table></div>`;
+}
+
+function viewReport(id){
+  const r=REPORTS.find(rr=>rr.id===id);if(!r)return;
+  const s=getStudent(r.studentId);
+  document.getElementById('modals').innerHTML=`
+  <div class="modal-overlay active" onclick="if(event.target===this)this.classList.remove('active')">
+    <div class="modal" style="width:600px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h2>${s.name} · ${r.date} 리포트</h2>
+        <span class="badge badge-${r.status==='발송완료'?'success':r.status==='검토중'?'warning':'danger'}">${r.status}</span>
+      </div>
+      <div class="report-preview">${r.text}</div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="copyReport(\`${r.text.replace(/`/g,"'")}\`)">복사</button>
+        ${r.status!=='발송완료'?`<button class="btn btn-primary" onclick="sendReport(${r.id});document.querySelector('.modal-overlay').classList.remove('active')">발송 처리</button>`:''}
+        <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').classList.remove('active')">닫기</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function sendReport(id){
+  const r=REPORTS.find(rr=>rr.id===id);
+  if(r){r.status='발송완료';render();toast(`리포트 발송 완료! (목업)`);}
+}
+
+// ============ MATERIALS ============
+function renderMaterials(){
+  return `
+  <div class="page-header"><div><h1>교재/자료 관리</h1><div class="subtitle">학생별 교재 진도와 Google Drive 자료를 관리하세요</div></div>
+    <button class="btn btn-primary" onclick="toast('목업: 자료 추가')">+ 자료 추가</button></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><h3>교재별 진도 현황</h3></div>
+      ${STUDENTS.map(s=>{const pct=Math.round(s.currentPage/s.totalPages*100);return `
+        <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--g100)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <div><div style="font-weight:500;font-size:13px">${s.textbook}</div><div style="font-size:11px;color:var(--g500)">${s.name}</div></div>
+            <span style="font-size:12px;color:var(--g500)">${pct}%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${s.color}"></div></div>
+        </div>`}).join('')}
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>최근 업로드 자료</h3></div>
+      ${MATERIALS.map(m=>{const s=getStudent(m.studentId);return `
+        <div class="drive-item">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span>📄</span>
+            <div><div style="font-weight:500;font-size:13px">${m.name}</div><div style="font-size:11px;color:var(--g500)">${s?s.name:''} · ${m.date}</div></div>
+          </div>
+          <button class="btn btn-sm btn-secondary" onclick="toast('목업: Google Drive 열기')">열기</button>
+        </div>`}).join('')}
+    </div>
+  </div>`;
+}
+
+// ============ SCHEDULE ============
+function renderSchedule(){
+  const times=['14:00','16:00','17:00','19:00'];
+  const days=[1,2,3,4,5,6,7];
+
+  return `
+  <div class="page-header"><div><h1>수업 일정</h1><div class="subtitle">이번 주 수업 일정</div></div>
+    <button class="btn btn-primary" onclick="toast('목업: 수업 추가')">+ 수업 추가</button></div>
+  <div class="card">
+    <div class="sched-grid">
+      <div class="sched-head"></div>
+      ${days.map(d=>`<div class="sched-head">${DAY_NAMES[d]} (4/${12+d})</div>`).join('')}
+      ${times.map(time=>`
+        <div class="sched-time">${time}</div>
+        ${days.map(day=>{
+          const match=SCHEDULE_DATA.find(sc=>sc.time===time&&sc.days.includes(day));
+          if(match){
+            const s=getStudent(match.studentId);
+            return `<div class="sched-cell"><div class="sched-block" style="background:${s.color}15;border-color:${s.color};cursor:pointer" onclick="navigate('student-detail',${s.id})"><div style="font-weight:600">${s.name}</div><div style="color:var(--g500)">${s.subject}</div></div></div>`;
+          }
+          return '<div class="sched-cell"></div>';
+        }).join('')}
+      `).join('')}
+    </div>
+  </div>`;
+}
+
+// ============ ADD STUDENT MODAL ============
+function openAddStudent(){
+  document.getElementById('modals').innerHTML=`
+  <div class="modal-overlay active" onclick="if(event.target===this)this.classList.remove('active')">
+    <div class="modal">
+      <h2>학생 추가</h2>
+      <div class="grid-2">
+        <div class="form-group"><label>학생 이름</label><input type="text" class="form-input" id="ns-name" placeholder="홍길동"></div>
+        <div class="form-group"><label>학년</label><select class="form-input" id="ns-grade"><option>중1</option><option>중2</option><option>중3</option><option>고1</option><option>고2</option><option>고3</option></select></div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group"><label>과목</label><input type="text" class="form-input" id="ns-subject" placeholder="수학"></div>
+        <div class="form-group"><label>학부모 이름</label><input type="text" class="form-input" id="ns-parent" placeholder="홍부모"></div>
+      </div>
+      <div class="form-group"><label>사용 교재</label><input type="text" class="form-input" id="ns-textbook" placeholder="개념원리 중3-2"></div>
+      <div class="form-group"><label>수업 요일/시간</label><input type="text" class="form-input" id="ns-schedule" placeholder="월/수/금 14:00"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').classList.remove('active')">취소</button>
+        <button class="btn btn-primary" onclick="addStudent()">추가</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function addStudent(){
+  const name=document.getElementById('ns-name').value||'새 학생';
+  const colors=['#8B5CF6','#06B6D4','#F43F5E','#84CC16','#F97316'];
+  STUDENTS.push({
+    id:STUDENTS.length+1,name,initial:name[0],color:colors[STUDENTS.length%colors.length],
+    grade:document.getElementById('ns-grade').value,
+    subject:document.getElementById('ns-subject').value||'수학',
+    parent:document.getElementById('ns-parent').value||'-',
+    textbook:document.getElementById('ns-textbook').value||'-',
+    currentPage:0,totalPages:100,chapter:'-',
+    schedule:document.getElementById('ns-schedule').value||'-',memo:''
   });
+  document.querySelector('.modal-overlay').classList.remove('active');
+  render();
+  toast(`${name} 학생이 추가되었습니다! (목업)`);
+}
 
-  // Tab switching
-  function switchTab(btn, contentId) {
-    btn.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
-    document.getElementById(contentId).style.display = 'block';
-  }
-
-  // Upload processing simulation
-  function startProcessing() {
-    const student = document.getElementById('upload-student').value;
-    if (!student) { alert('학생을 먼저 선택해주세요.'); return; }
-
-    document.getElementById('upload-step1').style.display = 'none';
-    document.getElementById('upload-processing').style.display = 'block';
-
-    setTimeout(() => {
-      const step3 = document.getElementById('step3');
-      step3.classList.remove('active');
-      step3.classList.add('done');
-      step3.querySelector('.step-icon').innerHTML = '&#10003;';
-      step3.querySelector('.step-sub').textContent = '237개 청크 처리 완료';
-
-      const step4 = document.getElementById('step4');
-      step4.classList.add('active');
-      step4.querySelector('.step-icon').innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;"></div>';
-      step4.querySelector('.step-sub').textContent = '수업 내용 분석중...';
-      document.querySelector('#upload-processing .progress-fill').style.width = '85%';
-    }, 2000);
-
-    setTimeout(() => {
-      const step4 = document.getElementById('step4');
-      step4.classList.remove('active');
-      step4.classList.add('done');
-      step4.querySelector('.step-icon').innerHTML = '&#10003;';
-      step4.querySelector('.step-sub').textContent = '요약 완료';
-
-      const step5 = document.getElementById('step5');
-      step5.classList.add('active');
-      step5.querySelector('.step-icon').innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;"></div>';
-      step5.querySelector('.step-sub').textContent = '리포트 작성중...';
-      document.querySelector('#upload-processing .progress-fill').style.width = '95%';
-    }, 3500);
-
-    setTimeout(() => {
-      document.getElementById('upload-processing').style.display = 'none';
-      document.getElementById('upload-done').style.display = 'block';
-    }, 5000);
-  }
+// ============ INIT ============
+renderNav();
+render();
 </script>
 </body>
 </html>
